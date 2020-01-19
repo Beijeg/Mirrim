@@ -1,2 +1,3 @@
 # Mirrim
-Beijeg Games
+Bijeg Games
+
