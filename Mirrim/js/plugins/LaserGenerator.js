@@ -201,6 +201,7 @@ class Node{
             if (rcv_flag){
                 console.log("Found receiver!");
                 console.log(event_obj);
+                $gameSwitches.setValue(laser_generator.rcv_id, true);
             }
             else{
                 console.log("location is not passable!");
@@ -218,8 +219,9 @@ class Beam extends Node{
 
 
 class LaserGenerator extends Node{
-    constructor(id, mapid, direction) {
+    constructor(id, mapid, direction, rcv_switch_id) {
         super(id, mapid, null, direction);
+        this.rcv_id = rcv_switch_id;
         this.active = false;
     }
 
