@@ -90,6 +90,7 @@ class Node{
     getNewBeam(x, y, direction){
         Galv.SPAWN.event(getDirectionTileId(direction),x,y,true);
         var event_id = $gameMap.eventIdXy(x,y);
+        console.log("New laser event created, id: "+event_id);
         var new_beam = new Beam(event_id, this.map_id, this, direction);
         this.addChild(new_beam);
         this.child.drawBeam();
@@ -125,6 +126,9 @@ class Node{
     }
 
     removeChild(){
+        console.log("removing child: "+ this.child);
+        console.log("despawning event: "+this.event_id);
+        Galv.SPAWN.unspawn($gameMap._events[this.event_id]);
         if(this.child != null){
             this.child.removeChild();
             this.child = null;
@@ -146,7 +150,8 @@ class Node{
         if (event){
             console.log($dataMap.events[event].name);
             console.log($dataMap.events[event]);
-            if($dataMap.events[event].name.startsWith("MIR")){
+            var name = $dataMap.events[event].name;
+            if(name.startsWith("MIR")){
                 mirror = $gameMap._events[event];
                 mirror_flag = true;
             }
@@ -213,14 +218,25 @@ class LaserGenerator extends Node{
         console.log("Laser is turned on.");
 
         this.drawBeam()
+        console.log("beam drawn, this child: "+this.child);
+        var ch = this.child;
+        while(ch !== null){
+            console.log("child!: "+ch);
+            ch = ch.child;
+        }
     }
 
     turnOff(){
         this.active = false;
+        console.log("Laser is turning off.");
+        console.log("this child: "+this.child);
+
         this.removeBeam();
     }
 
     removeBeam(){
-        this.removeChild();
+        this.child.removeChild();
     }
 }
+
+var laser_generator;
