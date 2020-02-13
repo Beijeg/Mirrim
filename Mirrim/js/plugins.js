@@ -3,5 +3,7 @@
 var $plugins =
 [
 {"name":"Community_Basic","status":true,"description":"Basic plugin for manipulating important parameters.","parameters":{"cacheLimit":"20","screenWidth":"816","screenHeight":"624","changeWindowWidthTo":"","changeWindowHeightTo":"","renderingMode":"auto","alwaysDash":"off"}},
-{"name":"MadeWithMv","status":false,"description":"Show a Splash Screen \"Made with MV\" and/or a Custom Splash Screen before going to main screen.","parameters":{"Show Made With MV":"false","Made with MV Image":"MadeWithMv","Show Custom Splash":"true","Custom Image":"Bijeg Games presents","Fade Out Time":"40","Fade In Time":"40","Wait Time":"40"}}
+{"name":"MadeWithMv","status":false,"description":"Show a Splash Screen \"Made with MV\" and/or a Custom Splash Screen before going to main screen.","parameters":{"Show Made With MV":"false","Made with MV Image":"MadeWithMv","Show Custom Splash":"true","Custom Image":"Bijeg Games presents","Fade Out Time":"40","Fade In Time":"40","Wait Time":"40"}},
+{"name":"LaserGenerator","status":true,"description":"","parameters":{}},
+{"name":"GALV_EventSpawner","status":true,"description":"(v.1.8) Spawn events from a specified spawn map to a desired location.","parameters":{"Spawn Map Id":"2"}}
 ];
