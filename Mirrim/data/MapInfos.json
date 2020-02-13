@@ -1,5 +1,6 @@
 [
 null,
-{"id":1,"expanded":true,"name":"MAP001","order":1,"parentId":0,"scrollX":484,"scrollY":359},
-{"id":2,"expanded":false,"name":"SPAWNMAP","order":2,"parentId":0,"scrollX":484,"scrollY":359}
+{"id":1,"expanded":true,"name":"LOBBY","order":1,"parentId":0,"scrollX":415,"scrollY":337},
+{"id":2,"expanded":true,"name":"SPAWNMAP","order":2,"parentId":0,"scrollX":484,"scrollY":359},
+{"id":3,"expanded":false,"name":"PUZZLE1","order":3,"parentId":0,"scrollX":0,"scrollY":0}
 ]
