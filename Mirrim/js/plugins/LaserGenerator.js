@@ -144,16 +144,20 @@ class Node{
         var event = $gameMap.eventIdXy(x,y);
         console.log(event);
         var mirror_flag = false;
-
-        var mirror;
+        var rcv_flag = false;
+        var event_obj;
 
         if (event){
             console.log($dataMap.events[event].name);
             console.log($dataMap.events[event]);
             var name = $dataMap.events[event].name;
             if(name.startsWith("MIR")){
-                mirror = $gameMap._events[event];
+                event_obj = $gameMap._events[event];
                 mirror_flag = true;
+            }
+            else if (name.startsWith("RCV")){
+                event_obj = $gameMap._events[event];
+                rcv_flag = true;
             }
         }
         // for (var i = 0; i < events.length; i++){
@@ -172,12 +176,12 @@ class Node{
             // TODO: implement getting mirror direction (depends on implementation of the mirror event)
             //      this section will likely change - this is essentially written as pseudo-code (issue# 7)
             console.log("Mirror:");
-            console.log(mirror);
-            var mirror_direction = mirror.direction();
+            console.log(event_obj);
+            var mirror_direction = event_obj.direction();
             console.log("Mirror facing: "+mirror_direction);
             var reflection_direction = getReflection(this.direction, mirror_direction);
             console.log("reflected direction: " + reflection_direction);
-            var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction)
+            var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction);
             console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
 
 
@@ -194,7 +198,13 @@ class Node{
         else{
             // not a mirror, and not passable
             // do nothing
-            console.log("location is not passable!");
+            if (rcv_flag){
+                console.log("Found receiver!");
+                console.log(event_obj);
+            }
+            else{
+                console.log("location is not passable!");
+            }
         }
     }
 }
@@ -217,7 +227,7 @@ class LaserGenerator extends Node{
         this.active = true;
         console.log("Laser is turned on.");
 
-        this.drawBeam()
+        this.drawBeam();
         console.log("beam drawn, this child: "+this.child);
         var ch = this.child;
         while(ch !== null){
