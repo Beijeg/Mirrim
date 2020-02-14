@@ -1,9 +1,10 @@
 [
 null,
-{"id":1,"expanded":true,"name":"LOBBY","order":2,"parentId":0,"scrollX":819,"scrollY":461},
-{"id":2,"expanded":true,"name":"SPAWNMAP","order":3,"parentId":0,"scrollX":612,"scrollY":416.6666666666667},
-{"id":3,"expanded":true,"name":"1.1Puzzle","order":4,"parentId":0,"scrollX":612,"scrollY":416.6666666666667},
+{"id":1,"expanded":true,"name":"LOBBY","order":2,"parentId":0,"scrollX":832,"scrollY":640},
+{"id":2,"expanded":true,"name":"SPAWNMAP","order":3,"parentId":0,"scrollX":819,"scrollY":461},
+{"id":3,"expanded":true,"name":"1.1Puzzle","order":4,"parentId":0,"scrollX":819,"scrollY":461},
 {"id":4,"expanded":true,"name":"1.2Puzzle","order":5,"parentId":0,"scrollX":819,"scrollY":461},
-{"id":5,"expanded":true,"name":"1.3Puzzle","order":6,"parentId":0,"scrollX":510.54545454545456,"scrollY":391.0909090909091},
-{"id":6,"expanded":false,"name":"INTRO","order":1,"parentId":0,"scrollX":819,"scrollY":461}
+{"id":5,"expanded":true,"name":"1.3Puzzle","order":6,"parentId":0,"scrollX":819,"scrollY":461},
+{"id":6,"expanded":false,"name":"INTRO","order":1,"parentId":0,"scrollX":819,"scrollY":461},
+{"id":7,"expanded":true,"name":"Blank Test","order":7,"parentId":0,"scrollX":832,"scrollY":640}
 ]
