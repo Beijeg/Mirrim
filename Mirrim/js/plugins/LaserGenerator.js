@@ -246,6 +246,11 @@ class LaserGenerator extends Node{
         this.removeBeam();
     }
 
+    update(){
+        this.turnOff();
+        this.turnOn();
+    }
+
     removeBeam(){
         this.child.removeChild();
     }
