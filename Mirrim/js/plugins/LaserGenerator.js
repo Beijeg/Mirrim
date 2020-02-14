@@ -257,3 +257,4 @@ class LaserGenerator extends Node{
 }
 
 var laser_generator;
+var laser_generator1;
