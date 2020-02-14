@@ -56,10 +56,10 @@ function getReflection(in_direction, mirror_direction){
 }
 
 function getNextLocation(x, y, direction) {
-    console.log("getting next location");
-    console.log("x: "+x);
-    console.log("y: "+y);
-    console.log("dir: "+direction);
+    // console.log("getting next location");
+    // console.log("x: "+x);
+    // console.log("y: "+y);
+    // console.log("dir: "+direction);
     var ret_x, ret_y;
     if (direction === directions.NORTH){
         ret_x = x;
@@ -90,7 +90,7 @@ class Node{
     getNewBeam(x, y, direction){
         Galv.SPAWN.event(getDirectionTileId(direction),x,y,true);
         var event_id = $gameMap.eventIdXy(x,y);
-        console.log("New laser event created, id: "+event_id);
+        // console.log("New laser event created, id: "+event_id);
         var new_beam = new Beam(event_id, this.map_id, this, direction);
         this.addChild(new_beam);
         this.child.drawBeam();
@@ -98,7 +98,7 @@ class Node{
 
     getMyNextLocation(){
         var [x, y] = this.getLocation();
-        console.log("current location, x: " + x + " y: " + y);
+        // console.log("current location, x: " + x + " y: " + y);
         var [ret_x, ret_y] = getNextLocation(x, y, this.direction);
         // if (this.direction === directions.NORTH){
         //     ret_x = x;
@@ -126,8 +126,8 @@ class Node{
     }
 
     removeChild(){
-        console.log("removing child: "+ this.child);
-        console.log("despawning event: "+this.event_id);
+        // console.log("removing child: "+ this.child);
+        // console.log("despawning event: "+this.event_id);
         Galv.SPAWN.unspawn($gameMap._events[this.event_id]);
         if(this.child != null){
             this.child.removeChild();
@@ -138,18 +138,18 @@ class Node{
     drawBeam(){
         var x, y;
         [x, y] = this.getMyNextLocation();
-        console.log("Next location, x: "+ x + " y: "+ y);
+        // console.log("Next location, x: "+ x + " y: "+ y);
         // TODO: implement checking if the next location has a mirror (issue# 7)
         // var events = $gameMap.eventsXy(x, y);
         var event = $gameMap.eventIdXy(x,y);
-        console.log(event);
+        // console.log(event);
         var mirror_flag = false;
         var rcv_flag = false;
         var event_obj;
 
         if (event){
-            console.log($dataMap.events[event].name);
-            console.log($dataMap.events[event]);
+            // console.log($dataMap.events[event].name);
+            // console.log($dataMap.events[event]);
             var name = $dataMap.events[event].name;
             if(name.startsWith("MIR")){
                 event_obj = $gameMap._events[event];
@@ -175,14 +175,14 @@ class Node{
             // The next location has a mirror
             // TODO: implement getting mirror direction (depends on implementation of the mirror event)
             //      this section will likely change - this is essentially written as pseudo-code (issue# 7)
-            console.log("Mirror:");
-            console.log(event_obj);
+            // console.log("Mirror:");
+            // console.log(event_obj);
             var mirror_direction = event_obj.direction();
-            console.log("Mirror facing: "+mirror_direction);
+            // console.log("Mirror facing: "+mirror_direction);
             var reflection_direction = getReflection(this.direction, mirror_direction);
-            console.log("reflected direction: " + reflection_direction);
+            // console.log("reflected direction: " + reflection_direction);
             var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction);
-            console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
+            // console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
 
 
             if (reflection_direction !== 0){
@@ -192,19 +192,19 @@ class Node{
         else if($gameMap.isPassable(x, y, this.direction)){
             // The next location is passable
             // TODO: implement beam spawning (return type: class Beam) (issue# 8)
-            console.log("location is passable!");
+            // console.log("location is passable!");
             this.getNewBeam(x, y, this.direction);
         }
         else{
             // not a mirror, and not passable
             // do nothing
             if (rcv_flag){
-                console.log("Found receiver!");
-                console.log(event_obj);
+                // console.log("Found receiver!");
+                // console.log(event_obj);
                 $gameSwitches.setValue(laser_generator.rcv_id, true);
             }
             else{
-                console.log("location is not passable!");
+                // console.log("location is not passable!");
             }
         }
     }
@@ -227,23 +227,28 @@ class LaserGenerator extends Node{
 
     turnOn(){
         this.active = true;
-        console.log("Laser is turned on.");
+        // console.log("Laser is turned on.");
 
         this.drawBeam();
-        console.log("beam drawn, this child: "+this.child);
+        // console.log("beam drawn, this child: "+this.child);
         var ch = this.child;
         while(ch !== null){
-            console.log("child!: "+ch);
+            // console.log("child!: "+ch);
             ch = ch.child;
         }
     }
 
     turnOff(){
         this.active = false;
-        console.log("Laser is turning off.");
-        console.log("this child: "+this.child);
+        // console.log("Laser is turning off.");
+        // console.log("this child: "+this.child);
 
         this.removeBeam();
+    }
+
+    update(){
+        this.turnOff();
+        this.turnOn();
     }
 
     removeBeam(){
