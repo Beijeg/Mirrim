@@ -170,41 +170,43 @@ class Node{
         //         break;
         //     }
         // }
-
-        if(mirror_flag){
-            // The next location has a mirror
-            // TODO: implement getting mirror direction (depends on implementation of the mirror event)
-            //      this section will likely change - this is essentially written as pseudo-code (issue# 7)
-            // console.log("Mirror:");
-            // console.log(event_obj);
-            var mirror_direction = event_obj.direction();
-            // console.log("Mirror facing: "+mirror_direction);
-            var reflection_direction = getReflection(this.direction, mirror_direction);
-            // console.log("reflected direction: " + reflection_direction);
-            var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction);
-            // console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
-
-
-            if (reflection_direction !== 0){
-                this.getNewBeam(reflection_x, reflection_y, reflection_direction);
-            }
-        }
-        else if($gameMap.isPassable(x, y, this.direction)){
-            // The next location is passable
-            // TODO: implement beam spawning (return type: class Beam) (issue# 8)
-            // console.log("location is passable!");
-            this.getNewBeam(x, y, this.direction);
-        }
-        else{
-            // not a mirror, and not passable
-            // do nothing
-            if (rcv_flag){
-                // console.log("Found receiver!");
+        console.log($gamePlayer.x != x && $gamePlayer.y != y)
+        if ($gamePlayer.x != x || $gamePlayer.y != y) {
+            if(mirror_flag){
+                // The next location has a mirror
+                // TODO: implement getting mirror direction (depends on implementation of the mirror event)
+                //      this section will likely change - this is essentially written as pseudo-code (issue# 7)
+                // console.log("Mirror:");
                 // console.log(event_obj);
-                $gameSwitches.setValue(laser_generator.rcv_id, true);
+                var mirror_direction = event_obj.direction();
+                // console.log("Mirror facing: "+mirror_direction);
+                var reflection_direction = getReflection(this.direction, mirror_direction);
+                // console.log("reflected direction: " + reflection_direction);
+                var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction);
+                // console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
+
+
+                if (reflection_direction !== 0){
+                    this.getNewBeam(reflection_x, reflection_y, reflection_direction);
+                }
+            }
+            else if($gameMap.isPassable(x, y, this.direction)){
+                // The next location is passable
+                // TODO: implement beam spawning (return type: class Beam) (issue# 8)
+                // console.log("location is passable!");
+                this.getNewBeam(x, y, this.direction);
             }
             else{
-                // console.log("location is not passable!");
+                // not a mirror, and not passable
+                // do nothing
+                if (rcv_flag){
+                    // console.log("Found receiver!");
+                    // console.log(event_obj);
+                    $gameSwitches.setValue(laser_generator.rcv_id, true);
+                }
+                else{
+                    // console.log("location is not passable!");
+                }
             }
         }
     }
@@ -252,7 +254,9 @@ class LaserGenerator extends Node{
     }
 
     removeBeam(){
-        this.child.removeChild();
+        if (this.child != null){
+            this.child.removeChild();
+        }
     }
 }
 
