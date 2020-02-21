@@ -96,6 +96,14 @@ class Node{
         $gameMap._events[this.event_id].setDirection(direction);
     }
 
+    getRoot(){
+        var node = this;
+        while(node.parent !== null){
+            node = node.parent;
+        }
+        return node;
+    }
+
     getNewBeam(x, y, direction){
         Galv.SPAWN.event(getDirectionTileId(direction),x,y,true);
         var event_id = $gameMap.eventIdXy(x,y);
@@ -165,7 +173,7 @@ class Node{
         var event = $gameMap.eventIdXy(x,y);
         // console.log(event);
         var mirror_flag = false;
-        var rcv_flag = false;
+        var rcv_id = null;
         var event_obj;
 
         if (event){
@@ -177,8 +185,11 @@ class Node{
                 mirror_flag = true;
             }
             else if (name.startsWith("RCV")){
-                event_obj = $gameMap._events[event];
-                rcv_flag = true;
+                // event_obj = $gameMap._events[event];
+                // rcv_id = true;
+                if (this.getRoot().receivers.includes(event)){
+                    rcv_id = event;
+                }
             }
         }
         // for (var i = 0; i < events.length; i++){
@@ -222,10 +233,10 @@ class Node{
         else{
             // not a mirror, and not passable
             // do nothing
-            if (rcv_flag){
+            if (rcv_id){
                 // console.log("Found receiver!");
                 // console.log(event_obj);
-                $gameSwitches.setValue(laser_generator.rcv_id, true);
+                $gameSwitches.setValue(rcv_id, true);
             }
             else{
                 // console.log("location is not passable!");
@@ -243,10 +254,20 @@ class Beam extends Node{
 
 
 class LaserGenerator extends Node{
-    constructor(id, mapid, direction, rcv_switch_id) {
+    constructor(id, mapid, direction) {
         super(id, mapid, null, direction);
-        this.rcv_id = rcv_switch_id;
+        this.receivers = [];
+        // this.rcv_id = rcv_switch_id;
         this.active = false;
+    }
+
+    addReceiver(receiver_id){
+        this.receivers.push(receiver_id);
+    }
+
+    removeReceiver(receiver_id){
+        var pos = this.receivers.indexOf(receiver_id);
+        this.receivers.splice(pos, 1);
     }
 
     turnOn(){
@@ -287,4 +308,25 @@ class LaserGenerator extends Node{
     }
 }
 
-var laser_generator;
+class LaserList extends Array{
+
+    addLaser(laser_generator){
+        this.push(laser_generator);
+    }
+
+    removeLaser(laser_id){
+        var pos = this.indexOf(laser_id);
+        this.splice(pos, 1);
+    }
+
+    getLaser(event_id){
+        for (var i = 0; i < this.length; i++){
+            if (this[i].event_id === event_id){
+                return this[i];
+            }
+        }
+        return null;
+    }
+}
+
+var laser_generators = new LaserList();
