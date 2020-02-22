@@ -7,16 +7,30 @@ const directions = {
 };
 
 const constants = {
+    RedVerticalLaser: 1,
+    RedHorizontalLaser: 2,
+    Direction: 1,
     PlayerX: 2,
-    PlayerY: 3
-}
+    PlayerY: 3,
+    EventX: 4,
+    EventY: 5,
+    Laser: 11,
+    Receiver: 12,
+    LaserDirection: 13,
+    LocalVar: 8,
+    LocalVar2: 15,
+    MapId: 16,
+    SwitchId: 17
+};
+
+var laser_tile_ids = [constants.RedVerticalLaser, constants.RedHorizontalLaser];
 
 function getDirectionTileId(direction){
     if (direction === directions.NORTH || direction === directions.SOUTH){
-        return 1;
+        return constants.RedVerticalLaser;
     }
     else{
-        return 2;
+        return constants.RedHorizontalLaser;
     }
 }
 
@@ -60,6 +74,21 @@ function getReflection(in_direction, mirror_direction){
     return out_direction;
 }
 
+function isLaserTile(x, y){
+    var is_laser = false;
+    var event_id = $gameMap.eventIdXy(x,y);
+    if (event_id) {
+        var event = $gameMap._events[event_id];
+        console.log(event);
+        if(event.isSpawnEvent){
+            if(laser_tile_ids.contains(event._spawnEventId)){
+                is_laser = true;
+            }
+        }
+    }
+    return is_laser;
+}
+
 function getNextLocation(x, y, direction) {
     // console.log("getting next location");
     // console.log("x: "+x);
@@ -79,6 +108,7 @@ function getNextLocation(x, y, direction) {
         ret_x = x + 1;
         ret_y = y;
     }
+    // console.log("ret x: "+ret_x +" rety y: "+ret_y);
     return [ret_x, ret_y];
 }
 
@@ -96,8 +126,16 @@ class Node{
         $gameMap._events[this.event_id].setDirection(direction);
     }
 
+    getRoot(){
+        var node = this;
+        while(node.parent !== null){
+            node = node.parent;
+        }
+        return node;
+    }
+
     getNewBeam(x, y, direction){
-        Galv.SPAWN.event(getDirectionTileId(direction),x,y,true);
+        Galv.SPAWN.event(getDirectionTileId(direction),x,y,false);
         var event_id = $gameMap.eventIdXy(x,y);
         // console.log("New laser event created, id: "+event_id);
         var new_beam = new Beam(event_id, this.map_id, this, direction);
@@ -152,6 +190,7 @@ class Node{
         var player_y = $gameVariables.value(constants.PlayerY);
         if (isSameLocation(player_x, player_y, x, y)){
             this.addChild(null);
+            this.getRoot().blocked = true;
             return;
         }
         // console.log("player x: ["+player_x+"] player y: ["+player_y+"] next x: ["+x+"] next y: ["+y+"]");
@@ -165,7 +204,7 @@ class Node{
         var event = $gameMap.eventIdXy(x,y);
         // console.log(event);
         var mirror_flag = false;
-        var rcv_flag = false;
+        var receiver = null;
         var event_obj;
 
         if (event){
@@ -177,8 +216,9 @@ class Node{
                 mirror_flag = true;
             }
             else if (name.startsWith("RCV")){
-                event_obj = $gameMap._events[event];
-                rcv_flag = true;
+                // event_obj = $gameMap._events[event];
+                // rcv_id = true;
+                receiver = this.getRoot().getReceiver(event);
             }
         }
         // for (var i = 0; i < events.length; i++){
@@ -206,6 +246,7 @@ class Node{
             // console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
             if(isSameLocation(player_x, player_y, reflection_x, reflection_y)){
                 this.addChild(null);
+                this.getRoot().blocked = true;
                 return;
             }
 
@@ -222,10 +263,10 @@ class Node{
         else{
             // not a mirror, and not passable
             // do nothing
-            if (rcv_flag){
+            if (receiver){
                 // console.log("Found receiver!");
                 // console.log(event_obj);
-                $gameSwitches.setValue(laser_generator.rcv_id, true);
+                $gameSwitches.setValue(receiver.switch_id, true);
             }
             else{
                 // console.log("location is not passable!");
@@ -243,10 +284,42 @@ class Beam extends Node{
 
 
 class LaserGenerator extends Node{
-    constructor(id, mapid, direction, rcv_switch_id) {
+    constructor(id, mapid, direction, switch_id) {
         super(id, mapid, null, direction);
-        this.rcv_id = rcv_switch_id;
+        this.receivers = [];
+        // this.rcv_id = rcv_switch_id;
+        this.switch_id = switch_id
         this.active = false;
+        this.blocked = null;
+    }
+
+    getBeam(event_id){
+        var node = this.child;
+        while(node !== null){
+            if(node.event_id === event_id){
+                return node;
+            }
+            node = node.child;
+        }
+        return null;
+    }
+
+    addReceiver(receiver_id){
+        this.receivers.push(receiver_id);
+    }
+
+    removeReceiver(receiver_id){
+        var pos = this.receivers.indexOf(receiver_id);
+        this.receivers.splice(pos, 1);
+    }
+
+    getReceiver(receiver_id){
+        var receiver = null;
+        for(var i=0; i < this.receivers.length; i++){
+            if(this.receivers[i].event_id === receiver_id){
+                return this.receivers[i];
+            }
+        }
     }
 
     turnOn(){
@@ -274,8 +347,41 @@ class LaserGenerator extends Node{
     }
 
     update(){
-        this.turnOff();
-        this.turnOn();
+        if(this.active){
+            this.turnOff();
+            this.turnOn();
+        }
+    }
+
+    updatePlayer(x, y, direction){
+        var is_laser = false;
+        var event = null;
+        var event_id = $gameMap.eventIdXy(x,y);
+        if (event_id) {
+            event = $gameMap._events[event_id];
+            console.log(event);
+            if(event.isSpawnEvent){
+                if(laser_tile_ids.contains(event._spawnEventId)){
+                    is_laser = true;
+                }
+            }
+        }
+
+
+        if(is_laser){
+            this.blocked = this.getBeam(event_id);
+            this.blocke
+        }
+        else if(this.blocked){
+            if(this.blocked === direction){
+
+            }
+            else{
+                this.blocked = null;
+            }
+            this.update();
+
+        }
     }
 
     removeBeam(){
@@ -287,5 +393,37 @@ class LaserGenerator extends Node{
     }
 }
 
-var laser_generator;
-var laser_generator1;
+class LaserList extends Array{
+
+    addLaser(laser_generator){
+        this.push(laser_generator);
+    }
+
+    removeLaser(laser_id){
+        var pos = this.indexOf(laser_id);
+        this.splice(pos, 1);
+    }
+
+    getLaser(event_id){
+        // console.log("getting laser with id: "+event_id);
+        for (var i = 0; i < this.length; i++){
+            // console.log("laser:");
+            // console.log(this[i]);
+            if (this[i].event_id === event_id){
+                return this[i];
+            }
+        }
+        return null;
+    }
+}
+
+class LaserReceiver{
+    constructor(event_id, switch_id){
+        this.event_id = event_id;
+        this.switch_id = switch_id;
+    }
+}
+
+
+var laser_generators = new LaserList();
+var lg;
