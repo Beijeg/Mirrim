@@ -39,20 +39,25 @@ function getDirectionTileId(direction){
 }
 
 function getElbowDirectionTileId(direction1, direction2){
+    console.log("direction1: "+direction1+" direction2: "+direction2);
     if((direction1 === directions.EAST) && (direction2 === directions.SOUTH) ||
         (direction1 === directions.NORTH) && (direction2 === directions.WEST)){
+        console.log("LD");
         return constants.RedLeftDownLaser;
     }
     else if ((direction1 === directions.EAST) && (direction2 === directions.NORTH) ||
         (direction1 === directions.SOUTH) && (direction2 === directions.WEST)){
+        console.log("LU");
         return constants.RedLeftUpLaser;
     }
     else if ((direction1 === directions.NORTH) && (direction2 === directions.EAST) ||
         (direction1 === directions.WEST) && (direction2 === directions.SOUTH)){
+        console.log("RD");
         return constants.RedRightDownLaser;
     }
     else if ((direction1 === directions.SOUTH) && (direction2 === directions.EAST) ||
         (direction1 === directions.WEST) && (direction2 === directions.NORTH)){
+        console.log("RU");
         return constants.RedRightUpLaser;
     }
 }
@@ -167,8 +172,17 @@ class Node{
     }
 
     getNewElbowBeam(x, y, direction1, direction2){
-        Galv.SPAWN.event(getElbowDirectionTileId(direction1, direction2),x,y,false);
-        var event_id = $gameMap.eventIdXy(x,y);
+        var elbow_id = getElbowDirectionTileId(direction1, direction2);
+        console.log("elb: "+elbow_id);
+        Galv.SPAWN.event(elbow_id,x,y,false);
+        var events = $gameMap.eventsXy(x,y);
+        var event_id;
+        for(var i=0; i < events.length; i++){
+            if(events[i].isSpawnEvent){
+                event_id = events[i]._eventId;
+            }
+        }
+
         var new_beam = new Beam(event_id, this.map_id, this, direction2);
         this.addChild(new_beam);
         this.child.drawBeam();
