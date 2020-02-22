@@ -9,6 +9,10 @@ const directions = {
 const constants = {
     RedVerticalLaser: 1,
     RedHorizontalLaser: 2,
+    RedLeftDownLaser: 3,
+    RedLeftUpLaser: 4,
+    RedRightDownLaser: 5,
+    RedRightUpLaser: 6,
     Direction: 1,
     PlayerX: 2,
     PlayerY: 3,
@@ -31,6 +35,25 @@ function getDirectionTileId(direction){
     }
     else{
         return constants.RedHorizontalLaser;
+    }
+}
+
+function getElbowDirectionTileId(direction1, direction2){
+    if((direction1 === directions.EAST) && (direction2 === directions.SOUTH) ||
+        (direction1 === directions.NORTH) && (direction2 === directions.WEST)){
+        return constants.RedLeftDownLaser;
+    }
+    else if ((direction1 === directions.EAST) && (direction2 === directions.NORTH) ||
+        (direction1 === directions.SOUTH) && (direction2 === directions.WEST)){
+        return constants.RedLeftUpLaser;
+    }
+    else if ((direction1 === directions.NORTH) && (direction2 === directions.EAST) ||
+        (direction1 === directions.WEST) && (direction2 === directions.SOUTH)){
+        return constants.RedRightDownLaser;
+    }
+    else if ((direction1 === directions.SOUTH) && (direction2 === directions.EAST) ||
+        (direction1 === directions.WEST) && (direction2 === directions.NORTH)){
+        return constants.RedRightUpLaser;
     }
 }
 
@@ -143,6 +166,14 @@ class Node{
         this.child.drawBeam();
     }
 
+    getNewElbowBeam(x, y, direction1, direction2){
+        Galv.SPAWN.event(getElbowDirectionTileId(direction1, direction2),x,y,false);
+        var event_id = $gameMap.eventIdXy(x,y);
+        var new_beam = new Beam(event_id, this.map_id, this, direction2);
+        this.addChild(new_beam);
+        this.child.drawBeam();
+    }
+
     getMyNextLocation(){
         var [x, y] = this.getLocation();
         // console.log("current location, x: " + x + " y: " + y);
@@ -242,16 +273,16 @@ class Node{
             // console.log("Mirror facing: "+mirror_direction);
             var reflection_direction = getReflection(this.direction, mirror_direction);
             // console.log("reflected direction: " + reflection_direction);
-            var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction);
+            // var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction);
             // console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
-            if(isSameLocation(player_x, player_y, reflection_x, reflection_y)){
-                this.addChild(null);
-                this.getRoot().blocked = true;
-                return;
-            }
+            // if(isSameLocation(player_x, player_y, reflection_x, reflection_y)){
+            //     this.addChild(null);
+            //     this.getRoot().blocked = true;
+            //     return;
+            // }
 
             if (reflection_direction !== 0){
-                this.getNewBeam(reflection_x, reflection_y, reflection_direction);
+                this.getNewElbowBeam(x, y, this.direction, reflection_direction);
             }
         }
         else if($gameMap.isPassable(x, y, this.direction)){
