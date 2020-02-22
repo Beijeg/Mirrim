@@ -1,4 +1,5 @@
 [
 null,
-{"id":1,"animationId":41,"consumable":false,"damage":{"critical":false,"elementId":0,"formula":"0","type":0,"variance":20},"description":"The opening cutscene.","effects":[{"code":44,"dataId":8,"value1":1,"value2":0}],"hitType":0,"iconIndex":4,"itypeId":2,"name":"The Beginning","note":"","occasion":2,"price":50,"repeats":1,"scope":8,"speed":0,"successRate":100,"tpGain":0}
+{"id":1,"animationId":41,"consumable":false,"damage":{"critical":false,"elementId":0,"formula":"0","type":0,"variance":20},"description":"The opening cutscene.","effects":[{"code":44,"dataId":8,"value1":1,"value2":0}],"hitType":0,"iconIndex":4,"itypeId":2,"name":"The Beginning","note":"","occasion":2,"price":50,"repeats":1,"scope":8,"speed":0,"successRate":100,"tpGain":0},
+{"id":2,"animationId":0,"consumable":false,"damage":{"critical":false,"elementId":0,"formula":"0","type":0,"variance":20},"description":"A distorted memory of a burning building.","effects":[],"hitType":0,"iconIndex":64,"itypeId":1,"name":"First Major Memory","note":"","occasion":0,"price":0,"repeats":1,"scope":7,"speed":0,"successRate":100,"tpGain":0}
 ]
