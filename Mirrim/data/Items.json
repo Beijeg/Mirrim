@@ -1,7 +1,4 @@
 [
 null,
-{"id":1,"animationId":0,"consumable":false,"damage":{"critical":false,"elementId":0,"formula":"0","type":0,"variance":20},"description":"An image of something burning...","effects":[],"hitType":0,"iconIndex":176,"itypeId":1,"name":"MEMORY_1","note":"","occasion":0,"price":0,"repeats":1,"scope":0,"speed":0,"successRate":100,"tpGain":0},
-{"id":2,"animationId":41,"consumable":true,"damage":{"critical":false,"elementId":0,"formula":"0","type":0,"variance":20},"description":"","effects":[],"hitType":0,"iconIndex":176,"itypeId":1,"name":"MEMORY_2","note":"","occasion":0,"price":100,"repeats":1,"scope":7,"speed":0,"successRate":100,"tpGain":0},
-{"id":3,"animationId":45,"consumable":true,"damage":{"critical":false,"elementId":0,"formula":"0","type":0,"variance":20},"description":"","effects":[],"hitType":0,"iconIndex":176,"itypeId":1,"name":"MEMORY_3","note":"","occasion":0,"price":200,"repeats":1,"scope":7,"speed":0,"successRate":100,"tpGain":0},
-{"id":4,"animationId":49,"consumable":true,"damage":{"critical":false,"elementId":0,"formula":"b.mhp / 2","type":0,"variance":20},"description":"","effects":[],"hitType":0,"iconIndex":176,"itypeId":1,"name":"MEMORY_4","note":"","occasion":0,"price":300,"repeats":1,"scope":9,"speed":0,"successRate":100,"tpGain":0}
+{"id":1,"animationId":41,"consumable":false,"damage":{"critical":false,"elementId":0,"formula":"0","type":0,"variance":20},"description":"The opening cutscene.","effects":[{"code":44,"dataId":8,"value1":1,"value2":0}],"hitType":0,"iconIndex":4,"itypeId":2,"name":"The Beginning","note":"","occasion":2,"price":50,"repeats":1,"scope":8,"speed":0,"successRate":100,"tpGain":0}
 ]

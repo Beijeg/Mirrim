@@ -6,6 +6,11 @@ const directions = {
     WEST: 4
 };
 
+const constants = {
+    PlayerX: 2,
+    PlayerY: 3
+}
+
 function getDirectionTileId(direction){
     if (direction === directions.NORTH || direction === directions.SOUTH){
         return 1;
@@ -77,6 +82,10 @@ function getNextLocation(x, y, direction) {
     return [ret_x, ret_y];
 }
 
+function isSameLocation(x1, y1, x2, y2){
+    return ((x1 === x2) && (y1 === y2));
+}
+
 class Node{
     constructor(id, mapid,  parent, direction) {
         this.event_id = id;
@@ -138,6 +147,18 @@ class Node{
     drawBeam(){
         var x, y;
         [x, y] = this.getMyNextLocation();
+
+        var player_x = $gameVariables.value(constants.PlayerX);
+        var player_y = $gameVariables.value(constants.PlayerY);
+        if (isSameLocation(player_x, player_y, x, y)){
+            this.addChild(null);
+            return;
+        }
+        // console.log("player x: ["+player_x+"] player y: ["+player_y+"] next x: ["+x+"] next y: ["+y+"]");
+        // if ((player_x === x) && (player_y === y)){
+        //     return;
+        // }
+
         // console.log("Next location, x: "+ x + " y: "+ y);
         // TODO: implement checking if the next location has a mirror (issue# 7)
         // var events = $gameMap.eventsXy(x, y);
@@ -183,7 +204,10 @@ class Node{
             // console.log("reflected direction: " + reflection_direction);
             var [reflection_x, reflection_y] = getNextLocation(x, y, reflection_direction);
             // console.log("location for reflected beam to be placed, x: " + reflection_x + " y: " + reflection_y);
-
+            if(isSameLocation(player_x, player_y, reflection_x, reflection_y)){
+                this.addChild(null);
+                return;
+            }
 
             if (reflection_direction !== 0){
                 this.getNewBeam(reflection_x, reflection_y, reflection_direction);
@@ -231,11 +255,13 @@ class LaserGenerator extends Node{
 
         this.drawBeam();
         // console.log("beam drawn, this child: "+this.child);
-        var ch = this.child;
-        while(ch !== null){
-            // console.log("child!: "+ch);
-            ch = ch.child;
-        }
+        // var ch = this.child;
+        // while(ch !== null){
+        //     console.log("child!: ");
+        //     console.log(ch);
+        //     ch = ch.child;
+        // }
+        // console.log("Laser on complete.");
     }
 
     turnOff(){
@@ -244,6 +270,7 @@ class LaserGenerator extends Node{
         // console.log("this child: "+this.child);
 
         this.removeBeam();
+        // console.log("Laser off complete.");
     }
 
     update(){
@@ -252,7 +279,11 @@ class LaserGenerator extends Node{
     }
 
     removeBeam(){
-        this.child.removeChild();
+        // console.log("removing beam, laser beam child: ")
+        // console.log(this.child);
+        if(this.child !== null){
+            this.child.removeChild();
+        }
     }
 }
 
