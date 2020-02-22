@@ -39,25 +39,25 @@ function getDirectionTileId(direction){
 }
 
 function getElbowDirectionTileId(direction1, direction2){
-    console.log("direction1: "+direction1+" direction2: "+direction2);
+    // console.log("direction1: "+direction1+" direction2: "+direction2);
     if((direction1 === directions.EAST) && (direction2 === directions.SOUTH) ||
         (direction1 === directions.NORTH) && (direction2 === directions.WEST)){
-        console.log("LD");
+        // console.log("LD");
         return constants.RedLeftDownLaser;
     }
     else if ((direction1 === directions.EAST) && (direction2 === directions.NORTH) ||
         (direction1 === directions.SOUTH) && (direction2 === directions.WEST)){
-        console.log("LU");
+        // console.log("LU");
         return constants.RedLeftUpLaser;
     }
     else if ((direction1 === directions.NORTH) && (direction2 === directions.EAST) ||
         (direction1 === directions.WEST) && (direction2 === directions.SOUTH)){
-        console.log("RD");
+        // console.log("RD");
         return constants.RedRightDownLaser;
     }
     else if ((direction1 === directions.SOUTH) && (direction2 === directions.EAST) ||
         (direction1 === directions.WEST) && (direction2 === directions.NORTH)){
-        console.log("RU");
+        // console.log("RU");
         return constants.RedRightUpLaser;
     }
 }
@@ -107,7 +107,7 @@ function isLaserTile(x, y){
     var event_id = $gameMap.eventIdXy(x,y);
     if (event_id) {
         var event = $gameMap._events[event_id];
-        console.log(event);
+        // console.log(event);
         if(event.isSpawnEvent){
             if(laser_tile_ids.contains(event._spawnEventId)){
                 is_laser = true;
@@ -173,7 +173,7 @@ class Node{
 
     getNewElbowBeam(x, y, direction1, direction2){
         var elbow_id = getElbowDirectionTileId(direction1, direction2);
-        console.log("elb: "+elbow_id);
+        // console.log("elb: "+elbow_id);
         Galv.SPAWN.event(elbow_id,x,y,false);
         var events = $gameMap.eventsXy(x,y);
         var event_id;
@@ -404,7 +404,7 @@ class LaserGenerator extends Node{
         var event_id = $gameMap.eventIdXy(x,y);
         if (event_id) {
             event = $gameMap._events[event_id];
-            console.log(event);
+            // console.log(event);
             if(event.isSpawnEvent){
                 if(laser_tile_ids.contains(event._spawnEventId)){
                     is_laser = true;
