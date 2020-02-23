@@ -116,7 +116,7 @@ Galv.SPAWN = Galv.SPAWN || {};      // Galv's stuff
 
 
 Galv.SPAWN.spawnMapId = Number(PluginManager.parameters('GALV_EventSpawner')["Spawn Map Id"]);
-Galv.SPAWN.overlap = 'none';
+Galv.SPAWN.overlap = 'all';
 Galv.SPAWN.sSwitches = ["A","B","C","D"];
 
 Galv.SPAWN.scenes = ['Scene_Map'];
