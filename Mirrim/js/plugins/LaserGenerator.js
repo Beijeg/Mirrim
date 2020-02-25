@@ -65,6 +65,7 @@ const constants = {
 };
 
 var laser_tile_ids = [constants.RedVerticalLaser, constants.RedHorizontalLaser];
+laser_tile_ids = laser_tile_ids.concat(Object.values(red_laser_ids));
 
 function getDirectionTileId(direction){
     if (direction === directions.NORTH || direction === directions.SOUTH){
@@ -314,12 +315,8 @@ class Node{
         var player_x = $gameVariables.value(constants.PlayerX);
         var player_y = $gameVariables.value(constants.PlayerY);
         if (isSameLocation(player_x, player_y, x, y)){
-            console.log("trying to add beam on player");
             this.addChild(null);
             this.getRoot().blocked = this;
-            console.log("this: ");
-            console.log(this);
-            console.log(this.getRoot().blocked);
             return;
         }
 
@@ -425,12 +422,38 @@ class LaserGenerator extends Node{
         }
     }
 
-    updatePlayer(x, y){
-        console.log(this.blocked);
+    updateMirror(x, y){
+        var events = $gameMap.eventsXy(x,y);
 
+        if(events.length > 1){
+            var mirror_event;
+            var laser_events = [];
+            for(var i=0; i < events.length; i++){
+                if(events[i].isSpawnEvent){
+                    if(isLaserTile(events[i]._spawnEventId)){
+                        laser_events.push(events[i]);
+                    }
+                }
+                else{
+                    var name = $dataMap.events[events[i].eventId()].name;
+                    if(name.startsWith("MIR")){
+                        mirror_event = events[i];
+                    }
+                }
+            }
+            var beam_parent = this.getBeam(laser_events.pop().eventId()).parent;
+            beam_parent.removeChild();
+            this.blocked = null;
+            beam_parent.drawBeam();
+        }
+
+    }
+
+    updatePlayer(x, y){
         var is_laser = false;
         var event = null;
         var event_id = $gameMap.eventIdXy(x, y);
+
         if (event_id) {
             event = $gameMap._events[event_id];
             if(event.isSpawnEvent){
@@ -441,12 +464,10 @@ class LaserGenerator extends Node{
         }
 
         if(is_laser){
-            console.log("is laser!");
             this.blocked = this.getBeam(event_id).parent;
             this.blocked.removeChild();
         }
         else if(this.blocked !== null){
-            console.log("we were blocked previously!");
             var blocked = this.blocked;
             this.blocked = null;
             blocked.drawBeam();
