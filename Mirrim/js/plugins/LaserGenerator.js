@@ -63,9 +63,9 @@ red_laser_ids[beam_context.RIGHT_MIR_HOR_BEAM] = 13;
 red_laser_ids[beam_context.UP_MIR_HOR_BEAM] = 14;
 
 red_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_SOUTH] = 15;
-red_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 16;
-red_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 17;
-red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 18;
+red_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_WEST] = 16;
+red_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_NORTH] = 17;
+red_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_EAST] = 18;
 
 red_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_SOUTH] = 19;
 red_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 20;
@@ -117,6 +117,10 @@ function getDirectionTileId(direction){
 }
 
 function getMirrorTileId(context){
+    return red_laser_ids[context];
+}
+
+function getRedLaserTileId(context){
     return red_laser_ids[context];
 }
 
@@ -364,11 +368,29 @@ class Node{
         this.child.drawBeam();
     }
 
+    getNewPlayerBeam(x, y, in_direction, player_direction){
+        var context = getPlayerBeamContext(in_direction, player_direction);
+        var blocked_beam_id = getRedLaserTileId(context);
+        Galv.SPAWN.event(blocked_beam_id, x, y,false);
+        var events = $gameMap.eventsXy(x,y);
+        var event_id;
+        for(var i=0; i < events.length; i++){
+            if(events[i].isSpawnEvent){
+                event_id = events[i]._eventId;
+            }
+        }
+
+        var new_beam
+        new_beam = new Beam(event_id, this.map_id, this, player_direction);
+        this.addChild(new_beam);
+        new_beam.addChild(null);
+    }
+
     getNewMirrowBeam(x, y, in_direction, mirror_direction){
         var [context, out_direction] = getBeamContext(this.direction, mirror_direction);
 
         var elbow_id = getMirrorTileId(context);
-        Galv.SPAWN.event(elbow_id,x,y,false);
+        Galv.SPAWN.event(elbow_id, x, y,false);
         var events = $gameMap.eventsXy(x,y);
         var event_id;
         for(var i=0; i < events.length; i++){
@@ -419,8 +441,8 @@ class Node{
         var player_x = $gameVariables.value(constants.PlayerX);
         var player_y = $gameVariables.value(constants.PlayerY);
         if (isSameLocation(player_x, player_y, x, y)){
-            this.addChild(null);
             this.getRoot().blocked = this;
+            this.getNewPlayerBeam(x, y, this.direction, $gamePlayer.direction());
             return;
         }
 
@@ -570,9 +592,11 @@ class LaserGenerator extends Node{
         if(is_laser){
             this.blocked = this.getBeam(event_id).parent;
             this.blocked.removeChild();
+            this.blocked.getNewPlayerBeam(x, y, this.blocked.direction, $gamePlayer.direction());
         }
         else if(this.blocked !== null){
             var blocked = this.blocked;
+            blocked.removeChild();
             this.blocked = null;
             blocked.drawBeam();
         }
