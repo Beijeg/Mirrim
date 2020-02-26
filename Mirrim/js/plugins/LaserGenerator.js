@@ -22,7 +22,27 @@ const beam_context = {
     DOWN_MIR_HOR_BEAM: 9,
     LEFT_MIR_HOR_BEAM: 10,
     RIGHT_MIR_HOR_BEAM: 11,
-    UP_MIR_HOR_BEAM: 12
+    UP_MIR_HOR_BEAM: 12,
+
+    DOWN_PLYR_VERT_BEAM_SOUTH: 13,
+    DOWN_PLYR_HOR_BEAM_WEST: 14,
+    DOWN_PLYR_VERT_BEAM_NORTH: 15,
+    DOWN_PLYR_HOR_BEAM_EAST: 16,
+
+    LEFT_PLYR_VERT_BEAM_SOUTH: 17,
+    LEFT_PLYR_HOR_BEAM_WEST: 18,
+    LEFT_PLYR_VERT_BEAM_NORTH: 19,
+    LEFT_PLYR_HOR_BEAM_EAST: 20,
+
+    RIGHT_PLYR_VERT_BEAM_SOUTH: 21,
+    RIGHT_PLYR_HOR_BEAM_WEST: 22,
+    RIGHT_PLYR_VERT_BEAM_NORTH: 23,
+    RIGHT_PLYR_HOR_BEAM_EAST: 24,
+
+    UP_PLYR_VERT_BEAM_SOUTH: 25,
+    UP_PLYR_HOR_BEAM_WEST: 26,
+    UP_PLYR_VERT_BEAM_NORTH: 27,
+    UP_PLYR_HOR_BEAM_EAST: 28
 };
 
 // event ids corresponding to the id's on the spawn map (for the given contexts in 'beam_context')
@@ -41,6 +61,26 @@ red_laser_ids[beam_context.DOWN_MIR_HOR_BEAM] = 11;
 red_laser_ids[beam_context.LEFT_MIR_HOR_BEAM] = 12;
 red_laser_ids[beam_context.RIGHT_MIR_HOR_BEAM] = 13;
 red_laser_ids[beam_context.UP_MIR_HOR_BEAM] = 14;
+
+red_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_SOUTH] = 15;
+red_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 16;
+red_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 17;
+red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 18;
+
+red_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_SOUTH] = 19;
+red_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 20;
+red_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_NORTH] = 21;
+red_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_EAST] = 24;
+
+red_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH] = 25;
+red_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_WEST] = 26;
+red_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 22;
+red_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_EAST] = 27;
+
+red_laser_ids[beam_context.UP_PLYR_VERT_BEAM_SOUTH] = 28;
+red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 29;
+red_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 23;
+red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 30;
 
 // general constants to be used by this plugin and from within the engine
 const constants = {
@@ -118,6 +158,70 @@ function getReflection(in_direction, mirror_direction){
     }
 
     return out_direction;
+}
+
+function getPlayerBeamContext(in_direction, player_direction){
+    var context = beam_context.DEFAULT_INVALID;
+    if (in_direction === directions.SOUTH){
+        if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_VERT_BEAM_SOUTH;
+        }
+        else if(player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_VERT_BEAM_SOUTH;
+        }
+        else if(player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_VERT_BEAM_SOUTH;
+        }
+        else if(player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH;
+        }
+    }
+    else if (in_direction === directions.EAST){
+        if (player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_HOR_BEAM_EAST;
+        }
+
+    }
+    else if (in_direction === directions.NORTH){
+        if (player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_VERT_BEAM_NORTH;
+        }
+        else if (player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_VERT_BEAM_NORTH;
+        }
+        else if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_VERT_BEAM_NORTH;
+        }
+        else if (player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_VERT_BEAM_NORTH;
+        }
+
+    }
+    else if (in_direction === directions.WEST){
+        if (player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_HOR_BEAM_WEST;
+        }
+        else if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_HOR_BEAM_WEST;
+        }
+        else if (player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_HOR_BEAM_WEST;
+        }
+    }
+
+    return context;
 }
 
 function getBeamContext(in_direction, mirror_direction){
