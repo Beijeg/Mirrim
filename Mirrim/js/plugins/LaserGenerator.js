@@ -22,7 +22,27 @@ const beam_context = {
     DOWN_MIR_HOR_BEAM: 9,
     LEFT_MIR_HOR_BEAM: 10,
     RIGHT_MIR_HOR_BEAM: 11,
-    UP_MIR_HOR_BEAM: 12
+    UP_MIR_HOR_BEAM: 12,
+
+    DOWN_PLYR_VERT_BEAM_SOUTH: 13,
+    DOWN_PLYR_HOR_BEAM_WEST: 14,
+    DOWN_PLYR_VERT_BEAM_NORTH: 15,
+    DOWN_PLYR_HOR_BEAM_EAST: 16,
+
+    LEFT_PLYR_VERT_BEAM_SOUTH: 17,
+    LEFT_PLYR_HOR_BEAM_WEST: 18,
+    LEFT_PLYR_VERT_BEAM_NORTH: 19,
+    LEFT_PLYR_HOR_BEAM_EAST: 20,
+
+    RIGHT_PLYR_VERT_BEAM_SOUTH: 21,
+    RIGHT_PLYR_HOR_BEAM_WEST: 22,
+    RIGHT_PLYR_VERT_BEAM_NORTH: 23,
+    RIGHT_PLYR_HOR_BEAM_EAST: 24,
+
+    UP_PLYR_VERT_BEAM_SOUTH: 25,
+    UP_PLYR_HOR_BEAM_WEST: 26,
+    UP_PLYR_VERT_BEAM_NORTH: 27,
+    UP_PLYR_HOR_BEAM_EAST: 28
 };
 
 // event ids corresponding to the id's on the spawn map (for the given contexts in 'beam_context')
@@ -41,6 +61,26 @@ red_laser_ids[beam_context.DOWN_MIR_HOR_BEAM] = 11;
 red_laser_ids[beam_context.LEFT_MIR_HOR_BEAM] = 12;
 red_laser_ids[beam_context.RIGHT_MIR_HOR_BEAM] = 13;
 red_laser_ids[beam_context.UP_MIR_HOR_BEAM] = 14;
+
+red_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_SOUTH] = 15;
+red_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_WEST] = 16;
+red_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_NORTH] = 17;
+red_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_EAST] = 18;
+
+red_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_SOUTH] = 19;
+red_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 20;
+red_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_NORTH] = 21;
+red_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_EAST] = 24;
+
+red_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH] = 25;
+red_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_WEST] = 26;
+red_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 22;
+red_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_EAST] = 27;
+
+red_laser_ids[beam_context.UP_PLYR_VERT_BEAM_SOUTH] = 28;
+red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 29;
+red_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 23;
+red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 30;
 
 // general constants to be used by this plugin and from within the engine
 const constants = {
@@ -65,6 +105,7 @@ const constants = {
 };
 
 var laser_tile_ids = [constants.RedVerticalLaser, constants.RedHorizontalLaser];
+laser_tile_ids = laser_tile_ids.concat(Object.values(red_laser_ids));
 
 function getDirectionTileId(direction){
     if (direction === directions.NORTH || direction === directions.SOUTH){
@@ -79,6 +120,13 @@ function getMirrorTileId(context){
     return red_laser_ids[context];
 }
 
+function getRedLaserTileId(context){
+    return red_laser_ids[context];
+}
+
+function isLaserTile(event_id){
+    return laser_tile_ids.contains(event_id);
+}
 
 function getReflection(in_direction, mirror_direction){
     var out_direction = 0;
@@ -118,6 +166,70 @@ function getReflection(in_direction, mirror_direction){
     }
 
     return out_direction;
+}
+
+function getPlayerBeamContext(in_direction, player_direction){
+    var context = beam_context.DEFAULT_INVALID;
+    if (in_direction === directions.SOUTH){
+        if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_VERT_BEAM_SOUTH;
+        }
+        else if(player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_VERT_BEAM_SOUTH;
+        }
+        else if(player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_VERT_BEAM_SOUTH;
+        }
+        else if(player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH;
+        }
+    }
+    else if (in_direction === directions.EAST){
+        if (player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_HOR_BEAM_EAST;
+        }
+
+    }
+    else if (in_direction === directions.NORTH){
+        if (player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_VERT_BEAM_NORTH;
+        }
+        else if (player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_VERT_BEAM_NORTH;
+        }
+        else if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_VERT_BEAM_NORTH;
+        }
+        else if (player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_VERT_BEAM_NORTH;
+        }
+
+    }
+    else if (in_direction === directions.WEST){
+        if (player_direction === directions.EAST){
+            context = beam_context.RIGHT_PLYR_HOR_BEAM_WEST;
+        }
+        else if (player_direction === directions.NORTH){
+            context = beam_context.UP_PLYR_HOR_BEAM_EAST;
+        }
+        else if (player_direction === directions.WEST){
+            context = beam_context.LEFT_PLYR_HOR_BEAM_WEST;
+        }
+        else if (player_direction === directions.SOUTH){
+            context = beam_context.DOWN_PLYR_HOR_BEAM_WEST;
+        }
+    }
+
+    return context;
 }
 
 function getBeamContext(in_direction, mirror_direction){
@@ -193,19 +305,19 @@ function getBeamContext(in_direction, mirror_direction){
     return [context, out_direction];
 }
 
-function isLaserTile(x, y){
-    var is_laser = false;
-    var event_id = $gameMap.eventIdXy(x,y);
-    if (event_id) {
-        var event = $gameMap._events[event_id];
-        if(event.isSpawnEvent){
-            if(laser_tile_ids.contains(event._spawnEventId)){
-                is_laser = true;
-            }
-        }
-    }
-    return is_laser;
-}
+// function isLaserTile(x, y){
+//     var is_laser = false;
+//     var event_id = $gameMap.eventIdXy(x,y);
+//     if (event_id) {
+//         var event = $gameMap._events[event_id];
+//         if(event.isSpawnEvent){
+//             if(laser_tile_ids.contains(event._spawnEventId)){
+//                 is_laser = true;
+//             }
+//         }
+//     }
+//     return is_laser;
+// }
 
 function getNextLocation(x, y, direction) {
     var ret_x, ret_y;
@@ -256,11 +368,29 @@ class Node{
         this.child.drawBeam();
     }
 
+    getNewPlayerBeam(x, y, in_direction, player_direction){
+        var context = getPlayerBeamContext(in_direction, player_direction);
+        var blocked_beam_id = getRedLaserTileId(context);
+        Galv.SPAWN.event(blocked_beam_id, x, y,false);
+        var events = $gameMap.eventsXy(x,y);
+        var event_id;
+        for(var i=0; i < events.length; i++){
+            if(events[i].isSpawnEvent){
+                event_id = events[i]._eventId;
+            }
+        }
+
+        var new_beam
+        new_beam = new Beam(event_id, this.map_id, this, player_direction);
+        this.addChild(new_beam);
+        new_beam.addChild(null);
+    }
+
     getNewMirrowBeam(x, y, in_direction, mirror_direction){
         var [context, out_direction] = getBeamContext(this.direction, mirror_direction);
 
         var elbow_id = getMirrorTileId(context);
-        Galv.SPAWN.event(elbow_id,x,y,false);
+        Galv.SPAWN.event(elbow_id, x, y,false);
         var events = $gameMap.eventsXy(x,y);
         var event_id;
         for(var i=0; i < events.length; i++){
@@ -297,8 +427,8 @@ class Node{
     }
 
     removeChild(){
-        Galv.SPAWN.unspawn($gameMap._events[this.event_id]);
-        if(this.child != null){
+        if(this.child !== null){
+            Galv.SPAWN.unspawn($gameMap._events[this.child.event_id]);
             this.child.removeChild();
             this.child = null;
         }
@@ -311,8 +441,8 @@ class Node{
         var player_x = $gameVariables.value(constants.PlayerX);
         var player_y = $gameVariables.value(constants.PlayerY);
         if (isSameLocation(player_x, player_y, x, y)){
-            this.addChild(null);
-            this.getRoot().blocked = true;
+            this.getRoot().blocked = this;
+            this.getNewPlayerBeam(x, y, this.direction, $gamePlayer.direction());
             return;
         }
 
@@ -418,43 +548,62 @@ class LaserGenerator extends Node{
         }
     }
 
-    updatePlayer(x, y, direction){
+    updateMirror(x, y){
+        var events = $gameMap.eventsXy(x,y);
+
+        if(events.length > 1){
+            var mirror_event;
+            var laser_events = [];
+            for(var i=0; i < events.length; i++){
+                if(events[i].isSpawnEvent){
+                    if(isLaserTile(events[i]._spawnEventId)){
+                        laser_events.push(events[i]);
+                    }
+                }
+                else{
+                    var name = $dataMap.events[events[i].eventId()].name;
+                    if(name.startsWith("MIR")){
+                        mirror_event = events[i];
+                    }
+                }
+            }
+            var beam_parent = this.getBeam(laser_events.pop().eventId()).parent;
+            beam_parent.removeChild();
+            this.blocked = null;
+            beam_parent.drawBeam();
+        }
+
+    }
+
+    updatePlayer(x, y){
         var is_laser = false;
         var event = null;
-        var event_id = $gameMap.eventIdXy(x,y);
+        var event_id = $gameMap.eventIdXy(x, y);
+
         if (event_id) {
             event = $gameMap._events[event_id];
-            // console.log(event);
             if(event.isSpawnEvent){
-                if(laser_tile_ids.contains(event._spawnEventId)){
+                if(isLaserTile(event._spawnEventId)){
                     is_laser = true;
                 }
             }
         }
 
-
         if(is_laser){
-            this.blocked = this.getBeam(event_id);
-            // this.blocke
+            this.blocked = this.getBeam(event_id).parent;
+            this.blocked.removeChild();
+            this.blocked.getNewPlayerBeam(x, y, this.blocked.direction, $gamePlayer.direction());
         }
-        else if(this.blocked){
-            if(this.blocked === direction){
-
-            }
-            else{
-                this.blocked = null;
-            }
-            this.update();
-
+        else if(this.blocked !== null){
+            var blocked = this.blocked;
+            blocked.removeChild();
+            this.blocked = null;
+            blocked.drawBeam();
         }
     }
 
     removeBeam(){
-        // console.log("removing beam, laser beam child: ")
-        // console.log(this.child);
-        if(this.child !== null){
-            this.child.removeChild();
-        }
+        this.removeChild();
     }
 }
 
