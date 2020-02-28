@@ -455,30 +455,19 @@ class Node{
             var name = $dataMap.events[event].name;
             if(name.startsWith("MIR")){
                 event_obj = $gameMap._events[event];
-                mirror_flag = true;
+                // mirror_flag = true;
+                var mirror_direction = event_obj.direction();
+
+                this.getNewMirrowBeam(x, y, this.direction, mirror_direction);
             }
             else if (name.startsWith("RCV")){
                 receiver = this.getRoot().getReceiver(event);
+                $gameSwitches.setValue(receiver.switch_id, true);
+
             }
-        }
-
-        if(mirror_flag){
-            var mirror_direction = event_obj.direction();
-
-            this.getNewMirrowBeam(x, y, this.direction, mirror_direction);
         }
         else if($gameMap.isPassable(x, y, this.direction)){
             this.getNewBeam(x, y, this.direction);
-        }
-        else{
-
-            if (receiver){
-                $gameSwitches.setValue(receiver.switch_id, true);
-            }
-            else{
-                // not a mirror, and not passable
-                // do nothing
-            }
         }
     }
 }
