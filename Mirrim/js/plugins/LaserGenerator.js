@@ -529,6 +529,7 @@ class LaserGenerator extends Node{
     update(){
         if(this.active){
             this.turnOff();
+            this.blocked = null;
             this.turnOn();
         }
     }
