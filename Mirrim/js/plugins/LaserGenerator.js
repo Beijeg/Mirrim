@@ -305,20 +305,6 @@ function getBeamContext(in_direction, mirror_direction){
     return [context, out_direction];
 }
 
-// function isLaserTile(x, y){
-//     var is_laser = false;
-//     var event_id = $gameMap.eventIdXy(x,y);
-//     if (event_id) {
-//         var event = $gameMap._events[event_id];
-//         if(event.isSpawnEvent){
-//             if(laser_tile_ids.contains(event._spawnEventId)){
-//                 is_laser = true;
-//             }
-//         }
-//     }
-//     return is_laser;
-// }
-
 function getNextLocation(x, y, direction) {
     var ret_x, ret_y;
     if (direction === directions.NORTH){
@@ -362,7 +348,9 @@ class Node{
 
     getNewBeam(x, y, direction){
         Galv.SPAWN.event(getDirectionTileId(direction),x,y,false);
-        var event_id = $gameMap.eventIdXy(x,y);
+        var events = $gameMap.eventsXy(x,y);
+        var event_id = events.pop().eventId();
+
         var new_beam = new Beam(event_id, this.map_id, this, direction);
         this.addChild(new_beam);
         this.child.drawBeam();
@@ -373,14 +361,9 @@ class Node{
         var blocked_beam_id = getRedLaserTileId(context);
         Galv.SPAWN.event(blocked_beam_id, x, y,false);
         var events = $gameMap.eventsXy(x,y);
-        var event_id;
-        for(var i=0; i < events.length; i++){
-            if(events[i].isSpawnEvent){
-                event_id = events[i]._eventId;
-            }
-        }
+        var event_id = events.pop().eventId();
 
-        var new_beam
+        var new_beam;
         new_beam = new Beam(event_id, this.map_id, this, player_direction);
         this.addChild(new_beam);
         new_beam.addChild(null);
@@ -392,12 +375,7 @@ class Node{
         var elbow_id = getMirrorTileId(context);
         Galv.SPAWN.event(elbow_id, x, y,false);
         var events = $gameMap.eventsXy(x,y);
-        var event_id;
-        for(var i=0; i < events.length; i++){
-            if(events[i].isSpawnEvent){
-                event_id = events[i]._eventId;
-            }
-        }
+        var event_id = events.pop().eventId();
 
         var new_beam;
         if (out_direction){
@@ -450,7 +428,7 @@ class Node{
         var receiver = null;
         var event_obj;
 
-        if (event){
+        if (event && !$gameMap._events[event].isSpawnEvent){
             var name = $dataMap.events[event].name;
             if(name.startsWith("MIR")){
                 event_obj = $gameMap._events[event];
@@ -476,6 +454,7 @@ class Node{
 class Beam extends Node{
     constructor(id, mapid, parent, direction){
         super(id, mapid,  parent, direction);
+        this.rank = parent.rank + 1;
     }
 }
 
@@ -487,6 +466,23 @@ class LaserGenerator extends Node{
         this.switch_id = switch_id
         this.active = false;
         this.blocked = null;
+        this.rank = 0;
+    }
+
+    getFirstBeam(events){
+        var beam = null;
+        var rank = Infinity;
+        for(var i = 0; i < events.length; i++){
+            var node = this.getBeam(events[i].eventId());
+            if (node !== null) {
+                if(node.rank < rank){
+                    beam = node;
+                    rank = beam.rank;
+                }
+            }
+        }
+        return beam;
+
     }
 
     getBeam(event_id){
@@ -556,7 +552,10 @@ class LaserGenerator extends Node{
                     }
                 }
             }
-            var beam_parent = this.getBeam(laser_events.pop().eventId()).parent;
+
+            var beam = this.getFirstBeam(laser_events);
+
+            var beam_parent = beam.parent;
             beam_parent.removeChild();
             this.blocked = null;
             beam_parent.drawBeam();
@@ -565,23 +564,27 @@ class LaserGenerator extends Node{
     }
 
     updatePlayer(x, y){
-        var is_laser = false;
-        var event = null;
-        var event_id = $gameMap.eventIdXy(x, y);
+        var events = $gameMap.eventsXy(x,y);
 
-        if (event_id) {
-            event = $gameMap._events[event_id];
-            if(event.isSpawnEvent){
-                if(isLaserTile(event._spawnEventId)){
-                    is_laser = true;
+        if(events.length > 0){
+            var laser_events = [];
+            var is_laser = false;
+            for(var i=0; i < events.length; i++){
+                if(events[i].isSpawnEvent){
+                    if(isLaserTile(events[i]._spawnEventId)){
+                        laser_events.push(events[i]);
+                        is_laser = true;
+                    }
                 }
             }
-        }
 
-        if(is_laser){
-            this.blocked = this.getBeam(event_id).parent;
-            this.blocked.removeChild();
-            this.blocked.getNewPlayerBeam(x, y, this.blocked.direction, $gamePlayer.direction());
+            var beam = this.getFirstBeam(laser_events);
+            if(is_laser) {
+                this.blocked = beam.parent;
+                this.blocked.removeChild();
+                this.blocked.getNewPlayerBeam(x, y, this.blocked.direction, $gamePlayer.direction());
+            }
+
         }
         else if(this.blocked !== null){
             var blocked = this.blocked;
