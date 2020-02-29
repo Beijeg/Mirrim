@@ -1573,5 +1573,4 @@ _FNMap["reflection-w"]   = PIXI.filters.ReflectionFilter;
 _FNMap["motionblur"]     = PIXI.filters.MotionBlurFilter;
 _FNMap["glow"]           = PIXI.filters.GlowFilter;
 _FNMap["displacement"]   = PIXI.filters.DisplacementFilter;
-    
 Filter_Controller.filterNameMap = _FNMap;
