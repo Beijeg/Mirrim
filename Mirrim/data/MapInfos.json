@@ -50,7 +50,7 @@ null,
 {"id":48,"expanded":false,"name":"Ya_2","order":51,"parentId":46,"scrollX":0,"scrollY":0},
 {"id":49,"expanded":false,"name":"Ya_3","order":52,"parentId":46,"scrollX":0,"scrollY":0},
 {"id":50,"expanded":false,"name":"Ya_4","order":53,"parentId":46,"scrollX":0,"scrollY":0},
-{"id":51,"expanded":true,"name":"Puzzles","order":5,"parentId":0,"scrollX":459,"scrollY":323.5},
+{"id":51,"expanded":false,"name":"Puzzles","order":5,"parentId":0,"scrollX":459,"scrollY":323.5},
 {"id":52,"expanded":true,"name":"Memories","order":12,"parentId":0,"scrollX":459,"scrollY":323.5},
 {"id":53,"expanded":true,"name":"Maze","order":17,"parentId":0,"scrollX":459,"scrollY":323.5}
 ]
