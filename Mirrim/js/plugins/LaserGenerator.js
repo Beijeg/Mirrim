@@ -221,7 +221,7 @@ function getPlayerBeamContext(in_direction, player_direction){
             context = beam_context.RIGHT_PLYR_HOR_BEAM_WEST;
         }
         else if (player_direction === directions.NORTH){
-            context = beam_context.UP_PLYR_HOR_BEAM_EAST;
+            context = beam_context.UP_PLYR_HOR_BEAM_WEST;
         }
         else if (player_direction === directions.WEST){
             context = beam_context.LEFT_PLYR_HOR_BEAM_WEST;
