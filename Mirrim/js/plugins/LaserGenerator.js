@@ -95,6 +95,8 @@ const constants = {
     PlayerY: 3,
     EventX: 4,
     EventY: 5,
+    VariableA: 6,
+    VariableB: 7,
     Laser: 11,
     Receiver: 12,
     LaserDirection: 13,
@@ -562,6 +564,59 @@ class LaserGenerator extends Node{
             beam_parent.drawBeam();
         }
 
+    }
+
+    updatePushMirror(previous_x, previous_y, x, y){
+        var events = $gameMap.eventsXy(x,y);
+
+        if(events.length > 1){
+            var mirror_event;
+            var laser_events = [];
+            for(var i=0; i < events.length; i++){
+                if(events[i].isSpawnEvent){
+                    if(isLaserTile(events[i]._spawnEventId)){
+                        laser_events.push(events[i]);
+                    }
+                }
+                else{
+                    var name = $dataMap.events[events[i].eventId()].name;
+                    if(name.startsWith("MIR")){
+                        mirror_event = events[i];
+                    }
+                }
+            }
+
+            var beam = this.getFirstBeam(laser_events);
+
+            var beam_parent = beam.parent;
+            beam_parent.removeChild();
+            this.blocked = null;
+            beam_parent.drawBeam();
+        }
+        else{
+            events = $gameMap.eventsXy(previous_x, previous_y);
+            if(events.length > 0){
+                for(var i=0; i < events.length; i++){
+                    if(events[i].isSpawnEvent){
+                        if(isLaserTile(events[i]._spawnEventId)){
+                            laser_events.push(events[i]);
+                        }
+                    }
+                    else{
+                        var name = $dataMap.events[events[i].eventId()].name;
+                        if(name.startsWith("MIR")){
+                            mirror_event = events[i];
+                        }
+                    }
+                }
+
+                var beam = this.getFirstBeam(laser_events);
+                var beam_parent = beam.parent;
+                beam_parent.removeChild();
+                this.blocked = null;
+                beam_parent.drawBeam();
+            }
+        }
     }
 
     updatePlayer(x, y){

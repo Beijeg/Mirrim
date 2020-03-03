@@ -188,7 +188,6 @@ Yanfly.SEL.Game_CharacterBase_setDirection =
   Game_CharacterBase.prototype.setDirection;
 Game_CharacterBase.prototype.setDirection = function(d) {
     Yanfly.SEL.Game_CharacterBase_setDirection.call(this, d);
-    console.log(d);
     if (d != 0) {
       this.saveLocation();
     }
@@ -230,10 +229,8 @@ Game_Event.prototype.isSaveLocation = function() {
 };
 
 Game_Event.prototype.saveLocation = function() {
-    console.log(!this.isSaveLocation())
     if (!this.isSaveLocation()) return;
     $gameSystem.saveEventLocation($gameMap.mapId(), this);
-    console.log($gameSystem)
 };
 
 Game_Event.prototype.isLoadLocation = function() {
