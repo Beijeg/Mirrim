@@ -567,28 +567,6 @@ class LaserGenerator extends Node{
 
         if(events.length > 1){
             this.updateEvents(events);
-            // var mirror_event;
-            // var laser_events = [];
-            // for(var i=0; i < events.length; i++){
-            //     if(events[i].isSpawnEvent){
-            //         if(isLaserTile(events[i]._spawnEventId)){
-            //             laser_events.push(events[i]);
-            //         }
-            //     }
-            //     else{
-            //         var name = $dataMap.events[events[i].eventId()].name;
-            //         if(name.startsWith("MIR")){
-            //             mirror_event = events[i];
-            //         }
-            //     }
-            // }
-            //
-            // var beam = this.getFirstBeam(laser_events);
-            //
-            // var beam_parent = beam.parent;
-            // beam_parent.removeChild();
-            // this.blocked = null;
-            // beam_parent.drawBeam();
         }
 
     }
