@@ -4,6 +4,10 @@ var numArea3 = 0;
 var numTotal = 0;
 
 function calculateNumFragments(){
+  numArea1 = 0;
+  numArea2 = 0;
+  numArea3 = 0;
+  numTotal = 0;
   $dataItems.forEach(item => {
     if (item == null) {
     }
