@@ -441,7 +441,9 @@ class Node{
             }
             else if (name.startsWith("RCV")){
                 receiver = this.getRoot().getReceiver(event);
-                $gameSwitches.setValue(receiver.switch_id, true);
+                if (receiver !== null){
+                    $gameSwitches.setValue(receiver.switch_id, true);
+                }
                 return;
             }
         }
@@ -511,9 +513,11 @@ class LaserGenerator extends Node{
         var receiver = null;
         for(var i=0; i < this.receivers.length; i++){
             if(this.receivers[i].event_id === receiver_id){
-                return this.receivers[i];
+                receiver = this.receivers[i];
+                break;
             }
         }
+        return receiver;
     }
 
     turnOn(){
