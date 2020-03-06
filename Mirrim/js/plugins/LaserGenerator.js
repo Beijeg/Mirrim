@@ -576,17 +576,19 @@ class LaserGenerator extends Node{
     }
 
     updatePushMirror(previous_x, previous_y, x, y){
-        var events = $gameMap.eventsXy(previous_x, previous_y);
-        if(events.length > 0){
-            this.updateEvents(events);
-        }
-        else{
-            events = $gameMap.eventsXy(x, y);
-            if(events.length > 1){
-                this.updateEvents(events);
-            }
-        }
+    var events = $gameMap.eventsXy(previous_x, previous_y);
+    var update = [];
+    if(events.length > 0){
+        update.push(events.pop());
     }
+    events = $gameMap.eventsXy(x, y);
+    if(events.length > 1){
+        update.push(events.pop());
+    }
+    if (update.length > 0) {
+        this.updateEvents(update);
+    }
+}
 
     updatePlayer(x, y){
         var events = $gameMap.eventsXy(x,y);
