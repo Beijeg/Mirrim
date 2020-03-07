@@ -596,7 +596,7 @@ class LaserGenerator extends Node{
         if(events.length > 0){
             this.updateEvents(events);
         }
-        else if(this.blocked !== null){
+        if(this.blocked !== null){
             var blocked = this.blocked;
             blocked.removeChild();
             this.blocked = null;
