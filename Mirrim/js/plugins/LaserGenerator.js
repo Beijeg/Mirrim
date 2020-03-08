@@ -449,7 +449,7 @@ class Node{
             }
         }
 
-        if($gameMap.isPassable(x, y, this.direction || $gameMap.regionId(x, y) === constants.PassableRegion)){
+        if($gameMap.isPassable(x, y, this.direction) || $gameMap.regionId(x, y) === constants.PassableRegion){
             this.getNewBeam(x, y, this.direction);
         }
     }
