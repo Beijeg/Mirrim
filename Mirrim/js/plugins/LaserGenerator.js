@@ -42,11 +42,17 @@ const beam_context = {
     UP_PLYR_VERT_BEAM_SOUTH: 25,
     UP_PLYR_HOR_BEAM_WEST: 26,
     UP_PLYR_VERT_BEAM_NORTH: 27,
-    UP_PLYR_HOR_BEAM_EAST: 28
+    UP_PLYR_HOR_BEAM_EAST: 28,
+
+    VERT_BEAM: 29,
+    HOR_BEAM: 30
 };
 
 // event ids corresponding to the id's on the spawn map (for the given contexts in 'beam_context')
 const red_laser_ids = {};
+red_laser_ids[beam_context.VERT_BEAM] = 1;
+red_laser_ids[beam_context.HOR_BEAM] = 2;
+
 red_laser_ids[beam_context.LEFT_DOWN] = 3;
 red_laser_ids[beam_context.LEFT_UP] = 4;
 red_laser_ids[beam_context.RIGHT_DOWN] = 5;
@@ -82,6 +88,93 @@ red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 29;
 red_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 23;
 red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 30;
 
+const green_laser_ids = {};
+green_laser_ids[beam_context.VERT_BEAM] = 31;
+green_laser_ids[beam_context.HOR_BEAM] = 32;
+
+green_laser_ids[beam_context.LEFT_DOWN] = 33;
+green_laser_ids[beam_context.LEFT_UP] = 34;
+green_laser_ids[beam_context.RIGHT_DOWN] = 35;
+green_laser_ids[beam_context.RIGHT_UP] = 36;
+
+green_laser_ids[beam_context.DOWN_MIR_VERT_BEAM] = 37;
+green_laser_ids[beam_context.LEFT_MIR_VERT_BEAM] = 43;
+green_laser_ids[beam_context.RIGHT_MIR_VERT_BEAM] = 49;
+green_laser_ids[beam_context.UP_MIR_VERT_BEAM] = 55;
+
+green_laser_ids[beam_context.DOWN_MIR_HOR_BEAM] = 38;
+green_laser_ids[beam_context.LEFT_MIR_HOR_BEAM] = 44;
+green_laser_ids[beam_context.RIGHT_MIR_HOR_BEAM] = 50;
+green_laser_ids[beam_context.UP_MIR_HOR_BEAM] = 56;
+
+green_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_SOUTH] = 39;
+green_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_WEST] = 40;
+green_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_NORTH] = 41;
+green_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_EAST] = 42;
+
+green_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_SOUTH] = 45;
+green_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 46;
+green_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_NORTH] = 47;
+green_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_EAST] = 48;
+
+green_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH] = 51;
+green_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_WEST] = 52;
+green_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 53;
+green_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_EAST] = 54;
+
+green_laser_ids[beam_context.UP_PLYR_VERT_BEAM_SOUTH] = 57;
+green_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 58;
+green_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 59;
+green_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 60;
+
+const blue_laser_ids = {};
+blue_laser_ids[beam_context.VERT_BEAM] = 61;
+blue_laser_ids[beam_context.HOR_BEAM] = 62;
+
+blue_laser_ids[beam_context.LEFT_DOWN] = 63;
+blue_laser_ids[beam_context.LEFT_UP] = 64;
+blue_laser_ids[beam_context.RIGHT_DOWN] = 65;
+blue_laser_ids[beam_context.RIGHT_UP] = 66;
+
+blue_laser_ids[beam_context.DOWN_MIR_VERT_BEAM] = 67;
+blue_laser_ids[beam_context.LEFT_MIR_VERT_BEAM] = 68;
+blue_laser_ids[beam_context.RIGHT_MIR_VERT_BEAM] = 69;
+blue_laser_ids[beam_context.UP_MIR_VERT_BEAM] = 70;
+
+blue_laser_ids[beam_context.DOWN_MIR_HOR_BEAM] = 71;
+blue_laser_ids[beam_context.LEFT_MIR_HOR_BEAM] = 72;
+blue_laser_ids[beam_context.RIGHT_MIR_HOR_BEAM] = 73;
+blue_laser_ids[beam_context.UP_MIR_HOR_BEAM] = 74;
+
+blue_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_SOUTH] = 75;
+blue_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_WEST] = 76;
+blue_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_NORTH] = 77;
+blue_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_EAST] = 78;
+
+blue_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_SOUTH] = 79;
+blue_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 80;
+blue_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_NORTH] = 81;
+blue_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_EAST] = 82;
+
+blue_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH] = 83;
+blue_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_WEST] = 84;
+blue_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 85;
+blue_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_EAST] = 86;
+
+blue_laser_ids[beam_context.UP_PLYR_VERT_BEAM_SOUTH] = 87;
+blue_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 88;
+blue_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 89;
+blue_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 90;
+
+const supported_colours = ["red", "green", "blue"];
+const colour_codes = {"red": 1, "green": 2, "blue": 3};
+const colour_code_to_ids = {1: red_laser_ids, 2: green_laser_ids, 3: blue_laser_ids};
+
+var laser_tile_ids = [];
+laser_tile_ids = laser_tile_ids.concat(Object.values(red_laser_ids));
+laser_tile_ids = laser_tile_ids.concat(Object.values(green_laser_ids));
+laser_tile_ids = laser_tile_ids.concat(Object.values(blue_laser_ids));
+
 // general constants to be used by this plugin and from within the engine
 const constants = {
     RedVerticalLaser: 1,
@@ -103,26 +196,29 @@ const constants = {
     LocalVar: 8,
     LocalVar2: 15,
     MapId: 16,
-    SwitchId: 17
+    SwitchId: 17,
+    LaserColour: 31
 };
 
-var laser_tile_ids = [constants.RedVerticalLaser, constants.RedHorizontalLaser];
-laser_tile_ids = laser_tile_ids.concat(Object.values(red_laser_ids));
 
-function getDirectionTileId(direction){
+function getDirectionTileId(direction, colour){
     if (direction === directions.NORTH || direction === directions.SOUTH){
-        return constants.RedVerticalLaser;
+        return colour_code_to_ids[colour][beam_context.VERT_BEAM];
     }
     else{
-        return constants.RedHorizontalLaser;
+        return colour_code_to_ids[colour][beam_context.HOR_BEAM];
     }
 }
 
-function getMirrorTileId(context){
-    return red_laser_ids[context];
+function getLaserTileId(context, colour){
+    return colour_code_to_ids[colour][context];
 }
 
-function getRedLaserTileId(context){
+function getMirrorTileId(context, colour){
+    return colour_code_to_ids[colour][context];
+}
+
+function getRedLaserTileId(context, colour){
     return red_laser_ids[context];
 }
 
@@ -331,12 +427,13 @@ function isSameLocation(x1, y1, x2, y2){
 }
 
 class Node{
-    constructor(id, mapid,  parent, direction) {
+    constructor(id, mapid,  parent, direction, colour) {
         this.event_id = id;
         this.map_id = mapid;
         this.parent = parent;
         this.child = null;
         this.direction = direction;
+        this.colour = colour
         $gameMap._events[this.event_id].setDirection(direction);
     }
 
@@ -349,24 +446,24 @@ class Node{
     }
 
     getNewBeam(x, y, direction){
-        Galv.SPAWN.event(getDirectionTileId(direction),x,y,false);
+        Galv.SPAWN.event(getDirectionTileId(direction, this.colour),x,y,false);
         var events = $gameMap.eventsXy(x,y);
         var event_id = events.pop().eventId();
 
-        var new_beam = new Beam(event_id, this.map_id, this, direction);
+        var new_beam = new Beam(event_id, this.map_id, this, direction, this.colour);
         this.addChild(new_beam);
         this.child.drawBeam();
     }
 
     getNewPlayerBeam(x, y, in_direction, player_direction){
         var context = getPlayerBeamContext(in_direction, player_direction);
-        var blocked_beam_id = getRedLaserTileId(context);
+        var blocked_beam_id = getLaserTileId(context, this.colour);
         Galv.SPAWN.event(blocked_beam_id, x, y,false);
         var events = $gameMap.eventsXy(x,y);
         var event_id = events.pop().eventId();
 
         var new_beam;
-        new_beam = new Beam(event_id, this.map_id, this, player_direction);
+        new_beam = new Beam(event_id, this.map_id, this, player_direction, this.colour);
         this.addChild(new_beam);
         new_beam.addChild(null);
     }
@@ -374,19 +471,19 @@ class Node{
     getNewMirrowBeam(x, y, in_direction, mirror_direction){
         var [context, out_direction] = getBeamContext(this.direction, mirror_direction);
 
-        var elbow_id = getMirrorTileId(context);
+        var elbow_id = getLaserTileId(context, this.colour);
         Galv.SPAWN.event(elbow_id, x, y,false);
         var events = $gameMap.eventsXy(x,y);
         var event_id = events.pop().eventId();
 
         var new_beam;
         if (out_direction){
-            new_beam = new Beam(event_id, this.map_id, this, out_direction);
+            new_beam = new Beam(event_id, this.map_id, this, out_direction, this.colour);
             this.addChild(new_beam);
             this.child.drawBeam();
         }
         else{
-            new_beam = new Beam(event_id, this.map_id, this, in_direction);
+            new_beam = new Beam(event_id, this.map_id, this, in_direction, this.colour);
             this.addChild(new_beam);
         }
     }
@@ -456,8 +553,8 @@ class Node{
 
 
 class Beam extends Node{
-    constructor(id, mapid, parent, direction){
-        super(id, mapid,  parent, direction);
+    constructor(id, mapid, parent, direction, colour){
+        super(id, mapid,  parent, direction, colour);
         this.rank = parent.rank + 1;
     }
 }
@@ -465,7 +562,7 @@ class Beam extends Node{
 
 class LaserGenerator extends Node{
     constructor(id, mapid, direction, switch_id) {
-        super(id, mapid, null, direction);
+        super(id, mapid, null, direction, colour_codes["red"]);
         this.receivers = [];
         this.switch_id = switch_id
         this.active = false;
@@ -606,6 +703,16 @@ class LaserGenerator extends Node{
 
     removeBeam(){
         this.removeChild();
+    }
+
+    setColour(colour){
+        if(supported_colours.contains(colour)){
+            this.colour = colour_codes[colour];
+        }
+        else{
+            console.log("LaserGenerator["+this.event_id+"]:setColour("+colour+") - invalid colour.");
+            console.log("Supported colours: "+supported_colours);
+        }
     }
 }
 
