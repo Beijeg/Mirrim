@@ -103,7 +103,8 @@ const constants = {
     LocalVar: 8,
     LocalVar2: 15,
     MapId: 16,
-    SwitchId: 17
+    SwitchId: 17,
+    PassableRegion: 2
 };
 
 var laser_tile_ids = [constants.RedVerticalLaser, constants.RedHorizontalLaser];
@@ -448,7 +449,7 @@ class Node{
             }
         }
 
-        if($gameMap.isPassable(x, y, this.direction)){
+        if($gameMap.isPassable(x, y, this.direction || $gameMap.regionId(x, y) === constants.PassableRegion)){
             this.getNewBeam(x, y, this.direction);
         }
     }
