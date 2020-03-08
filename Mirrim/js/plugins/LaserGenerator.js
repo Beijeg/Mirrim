@@ -82,6 +82,43 @@ red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 29;
 red_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 23;
 red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 30;
 
+const green_laser_ids = {};
+
+green_laser_ids[beam_context.LEFT_DOWN] = 33;
+green_laser_ids[beam_context.LEFT_UP] = 34;
+green_laser_ids[beam_context.RIGHT_DOWN] = 35;
+green_laser_ids[beam_context.RIGHT_UP] = 36;
+
+green_laser_ids[beam_context.DOWN_MIR_VERT_BEAM] = 37;
+green_laser_ids[beam_context.LEFT_MIR_VERT_BEAM] = 43;
+green_laser_ids[beam_context.RIGHT_MIR_VERT_BEAM] = 49;
+green_laser_ids[beam_context.UP_MIR_VERT_BEAM] = 55;
+
+green_laser_ids[beam_context.DOWN_MIR_HOR_BEAM] = 38;
+green_laser_ids[beam_context.LEFT_MIR_HOR_BEAM] = 44;
+green_laser_ids[beam_context.RIGHT_MIR_HOR_BEAM] = 50;
+green_laser_ids[beam_context.UP_MIR_HOR_BEAM] = 56;
+
+green_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_SOUTH] = 39;
+green_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_WEST] = 40;
+green_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_NORTH] = 41;
+green_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_EAST] = 42;
+
+green_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_SOUTH] = 45;
+green_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 46;
+green_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_NORTH] = 47;
+green_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_EAST] = 48;
+
+green_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH] = 51;
+green_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_WEST] = 52;
+green_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 53;
+green_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_EAST] = 54;
+
+green_laser_ids[beam_context.UP_PLYR_VERT_BEAM_SOUTH] = 57;
+green_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 58;
+green_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 59;
+green_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 60;
+
 // general constants to be used by this plugin and from within the engine
 const constants = {
     RedVerticalLaser: 1,
