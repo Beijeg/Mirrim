@@ -197,7 +197,8 @@ const constants = {
     LocalVar2: 15,
     MapId: 16,
     SwitchId: 17,
-    LaserColour: 31
+    LaserColour: 31,
+    PassableRegion: 2
 };
 
 
@@ -545,7 +546,7 @@ class Node{
             }
         }
 
-        if($gameMap.isPassable(x, y, this.direction)){
+        if($gameMap.isPassable(x, y, this.direction) || $gameMap.regionId(x, y) === constants.PassableRegion){
             this.getNewBeam(x, y, this.direction);
         }
     }
