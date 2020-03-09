@@ -197,7 +197,8 @@ const constants = {
     LocalVar2: 15,
     MapId: 16,
     SwitchId: 17,
-    LaserColour: 31
+    LaserColour: 31,
+    PassableRegion: 2
 };
 
 
@@ -330,7 +331,7 @@ function getPlayerBeamContext(in_direction, player_direction){
     return context;
 }
 
-function getBeamContext(in_direction, mirror_direction){
+function getMirrorBeamContext(in_direction, mirror_direction){
     var context = beam_context.DEFAULT_INVALID;
     var out_direction = null;
     if (in_direction === directions.SOUTH){
@@ -403,6 +404,53 @@ function getBeamContext(in_direction, mirror_direction){
     return [context, out_direction];
 }
 
+function getDoubleMirrorBeamContext(in_direction, mirror_direction){
+    var context = beam_context.DEFAULT_INVALID;
+    var out_direction = null;
+    if (in_direction === directions.SOUTH){
+        if (mirror_direction === directions.NORTH || mirror_direction === directions.SOUTH){
+            context = beam_context.RIGHT_UP;
+            out_direction = directions.EAST
+        }
+        else if(mirror_direction === directions.WEST || mirror_direction === directions.EAST){
+            context = beam_context.LEFT_UP;
+            out_direction = directions.WEST;
+        }
+    }
+    else if (in_direction === directions.EAST){
+        if (mirror_direction === directions.WEST || mirror_direction === directions.EAST){
+            context = beam_context.LEFT_UP;
+            out_direction = directions.NORTH;
+        }
+        else if (mirror_direction === directions.SOUTH || mirror_direction === directions.NORTH){
+            context = beam_context.LEFT_DOWN;
+            out_direction = directions.SOUTH;
+        }
+    }
+    else if (in_direction === directions.NORTH){
+        if (mirror_direction === directions.SOUTH || mirror_direction === directions.NORTH){
+            context = beam_context.LEFT_DOWN;
+            out_direction = directions.WEST;
+        }
+        else if (mirror_direction === directions.EAST || mirror_direction === directions.WEST){
+            context = beam_context.RIGHT_DOWN;
+            out_direction = directions.EAST;
+        }
+    }
+    else if (in_direction === directions.WEST){
+        if (mirror_direction === directions.EAST || mirror_direction === directions.WEST){
+            context = beam_context.RIGHT_DOWN;
+            out_direction = directions.SOUTH;
+        }
+        else if (mirror_direction === directions.NORTH || mirror_direction === directions.SOUTH){
+            context = beam_context.RIGHT_UP;
+            out_direction = directions.NORTH;
+        }
+    }
+
+    return [context, out_direction];
+}
+
 function getNextLocation(x, y, direction) {
     var ret_x, ret_y;
     if (direction === directions.NORTH){
@@ -469,7 +517,27 @@ class Node{
     }
 
     getNewMirrowBeam(x, y, in_direction, mirror_direction){
-        var [context, out_direction] = getBeamContext(this.direction, mirror_direction);
+        var [context, out_direction] = getMirrorBeamContext(this.direction, mirror_direction);
+
+        var elbow_id = getLaserTileId(context, this.colour);
+        Galv.SPAWN.event(elbow_id, x, y,false);
+        var events = $gameMap.eventsXy(x,y);
+        var event_id = events.pop().eventId();
+
+        var new_beam;
+        if (out_direction){
+            new_beam = new Beam(event_id, this.map_id, this, out_direction, this.colour);
+            this.addChild(new_beam);
+            this.child.drawBeam();
+        }
+        else{
+            new_beam = new Beam(event_id, this.map_id, this, in_direction, this.colour);
+            this.addChild(new_beam);
+        }
+    }
+
+    getNewDoubleMirrowBeam(x, y, in_direction, mirror_direction){
+        var [context, out_direction] = getDoubleMirrorBeamContext(this.direction, mirror_direction);
 
         var elbow_id = getLaserTileId(context, this.colour);
         Galv.SPAWN.event(elbow_id, x, y,false);
@@ -536,6 +604,13 @@ class Node{
                 this.getNewMirrowBeam(x, y, this.direction, mirror_direction);
                 return;
             }
+            else if (name.startsWith("DMIR")){
+                event_obj = $gameMap._events[event];
+                var mirror_direction = event_obj.direction();
+
+                this.getNewDoubleMirrowBeam(x, y, this.direction, mirror_direction);
+                return;
+            }
             else if (name.startsWith("RCV")){
                 receiver = this.getRoot().getReceiver(event);
                 if (receiver !== null){
@@ -545,7 +620,7 @@ class Node{
             }
         }
 
-        if($gameMap.isPassable(x, y, this.direction)){
+        if($gameMap.isPassable(x, y, this.direction) || $gameMap.regionId(x, y) === constants.PassableRegion){
             this.getNewBeam(x, y, this.direction);
         }
     }
@@ -648,7 +723,7 @@ class LaserGenerator extends Node{
             }
             else{
                 var name = $dataMap.events[events[i].eventId()].name;
-                if(name.startsWith("MIR")){
+                if(name.startsWith("MIR") || name.startsWith("DMIR")){
                     mirror_event = events[i];
                 }
             }
