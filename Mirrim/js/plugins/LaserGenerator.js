@@ -618,6 +618,17 @@ class Node{
                 }
                 return;
             }
+            else if (name.startsWith("FILT")){
+                Object.keys(colour_codes).forEach(colour => {
+                    if (name.toLowerCase().contains(colour)){
+                        if (this.colour === colour_codes[colour]){
+                            this.getNewBeam(x, y, this.direction);
+                            return;
+                        }
+                    }
+                });
+                return;
+            }
         }
 
         if($gameMap.isPassable(x, y, this.direction) || $gameMap.regionId(x, y) === constants.PassableRegion){
