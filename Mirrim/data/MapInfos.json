@@ -67,6 +67,6 @@ null,
 {"id":65,"expanded":false,"name":"Memory_8","order":33,"parentId":52,"scrollX":0,"scrollY":0},
 {"id":66,"expanded":true,"name":"Memory_9","order":34,"parentId":52,"scrollX":1092,"scrollY":614.6666666666666},
 {"id":67,"expanded":false,"name":"Memory_9_Ending","order":35,"parentId":66,"scrollX":832,"scrollY":640},
-{"id":68,"expanded":true,"name":"3.3 Maze","order":45,"parentId":7,"scrollX":832,"scrollY":640},
+{"id":68,"expanded":true,"name":"3.3 Maze","order":45,"parentId":7,"scrollX":1092,"scrollY":614.6666666666666},
 {"id":69,"expanded":true,"name":"3.4 Maze","order":46,"parentId":7,"scrollX":1092,"scrollY":614.6666666666666}
 ]
