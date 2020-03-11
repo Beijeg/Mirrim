@@ -206,7 +206,8 @@ const constants = {
     MapId: 16,
     SwitchId: 17,
     LaserColour: 31,
-    PassableRegion: 2
+    PassableRegion: 2,
+    InvisibleTileId: 94
 };
 
 
@@ -501,8 +502,13 @@ class Node{
         return node;
     }
 
-    getNewBeam(x, y, direction){
-        Galv.SPAWN.event(getDirectionTileId(direction, this.colour),x,y,false);
+    getNewBeam(x, y, direction, invisible=false){
+        if(invisible){
+            Galv.SPAWN.event(constants.InvisibleTileId,x,y,false);
+        }else{
+            Galv.SPAWN.event(getDirectionTileId(direction, this.colour),x,y,false);
+        }
+
         var events = $gameMap.eventsXy(x,y);
         var event_id = events.pop().eventId();
 
@@ -520,6 +526,21 @@ class Node{
             var new_beam = new Beam(event_id, this.map_id, this, direction, this.colour);
             this.addChild(new_beam);
             new_beam.addChild(null);
+        }
+    }
+
+    getNewFilterBeam(x, y, direction){
+        if (direction === directions.NORTH || direction === directions.SOUTH){
+            console.log("get new filter beam x: "+x+" y: "+y);
+            this.getNewFilterBlockedBeam(x, y, directions.NORTH);
+            if(this.child.direction !== direction){
+                this.child.direction = direction;
+                $gameMap._events[this.child.event_id].setDirection(direction);
+            }
+            this.child.drawBeam();
+        }
+        else{
+            this.getNewBeam(x, y, direction, true);
         }
     }
 
@@ -642,7 +663,7 @@ class Node{
                 Object.keys(colour_codes).forEach(colour => {
                     if (name.toLowerCase().contains(colour)){
                         if (this.colour === colour_codes[colour]){
-                            this.getNewBeam(x, y, this.direction, true);
+                            this.getNewFilterBeam(x, y, this.direction);
                         }
                         else{
                             this.getNewFilterBlockedBeam(x, y, this.direction);
