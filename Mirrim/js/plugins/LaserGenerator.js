@@ -45,7 +45,9 @@ const beam_context = {
     UP_PLYR_HOR_BEAM_EAST: 28,
 
     VERT_BEAM: 29,
-    HOR_BEAM: 30
+    HOR_BEAM: 30,
+
+    FILTER_BEAM_NORTH: 31
 };
 
 // event ids corresponding to the id's on the spawn map (for the given contexts in 'beam_context')
@@ -88,6 +90,8 @@ red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 29;
 red_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 23;
 red_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 30;
 
+red_laser_ids[beam_context.FILTER_BEAM_NORTH] = 17;
+
 const green_laser_ids = {};
 green_laser_ids[beam_context.VERT_BEAM] = 31;
 green_laser_ids[beam_context.HOR_BEAM] = 32;
@@ -126,6 +130,8 @@ green_laser_ids[beam_context.UP_PLYR_VERT_BEAM_SOUTH] = 57;
 green_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 58;
 green_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 59;
 green_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 60;
+
+green_laser_ids[beam_context.FILTER_BEAM_NORTH] = 41;
 
 const blue_laser_ids = {};
 blue_laser_ids[beam_context.VERT_BEAM] = 61;
@@ -166,6 +172,8 @@ blue_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 88;
 blue_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 89;
 blue_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 90;
 
+blue_laser_ids[beam_context.FILTER_BEAM_NORTH] = 77;
+
 const supported_colours = ["red", "green", "blue"];
 const colour_codes = {"red": 1, "green": 2, "blue": 3};
 const colour_code_to_ids = {1: red_laser_ids, 2: green_laser_ids, 3: blue_laser_ids};
@@ -198,7 +206,8 @@ const constants = {
     MapId: 16,
     SwitchId: 17,
     LaserColour: 31,
-    PassableRegion: 2
+    PassableRegion: 2,
+    InvisibleTileId: 94
 };
 
 
@@ -493,14 +502,46 @@ class Node{
         return node;
     }
 
-    getNewBeam(x, y, direction){
-        Galv.SPAWN.event(getDirectionTileId(direction, this.colour),x,y,false);
+    getNewBeam(x, y, direction, invisible=false){
+        if(invisible){
+            Galv.SPAWN.event(constants.InvisibleTileId,x,y,false);
+        }else{
+            Galv.SPAWN.event(getDirectionTileId(direction, this.colour),x,y,false);
+        }
+
         var events = $gameMap.eventsXy(x,y);
         var event_id = events.pop().eventId();
 
         var new_beam = new Beam(event_id, this.map_id, this, direction, this.colour);
         this.addChild(new_beam);
         this.child.drawBeam();
+    }
+
+    getNewFilterBlockedBeam(x, y, direction){
+        if(direction === directions.NORTH){
+            var beam_context_spawn_id = colour_code_to_ids[this.colour][beam_context.FILTER_BEAM_NORTH];
+            Galv.SPAWN.event(beam_context_spawn_id, x, y,false);
+            var events = $gameMap.eventsXy(x,y);
+            var event_id = events.pop().eventId();
+            var new_beam = new Beam(event_id, this.map_id, this, direction, this.colour);
+            this.addChild(new_beam);
+            new_beam.addChild(null);
+        }
+    }
+
+    getNewFilterBeam(x, y, direction){
+        if (direction === directions.NORTH || direction === directions.SOUTH){
+            console.log("get new filter beam x: "+x+" y: "+y);
+            this.getNewFilterBlockedBeam(x, y, directions.NORTH);
+            if(this.child.direction !== direction){
+                this.child.direction = direction;
+                $gameMap._events[this.child.event_id].setDirection(direction);
+            }
+            this.child.drawBeam();
+        }
+        else{
+            this.getNewBeam(x, y, direction, true);
+        }
     }
 
     getNewPlayerBeam(x, y, in_direction, player_direction){
@@ -622,8 +663,10 @@ class Node{
                 Object.keys(colour_codes).forEach(colour => {
                     if (name.toLowerCase().contains(colour)){
                         if (this.colour === colour_codes[colour]){
-                            this.getNewBeam(x, y, this.direction);
-                            return;
+                            this.getNewFilterBeam(x, y, this.direction);
+                        }
+                        else{
+                            this.getNewFilterBlockedBeam(x, y, this.direction);
                         }
                     }
                 });
