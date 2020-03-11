@@ -174,14 +174,56 @@ blue_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 90;
 
 blue_laser_ids[beam_context.FILTER_BEAM_NORTH] = 77;
 
-const supported_colours = ["red", "green", "blue"];
-const colour_codes = {"red": 1, "green": 2, "blue": 3};
-const colour_code_to_ids = {1: red_laser_ids, 2: green_laser_ids, 3: blue_laser_ids};
+const yellow_laser_ids = {};
+yellow_laser_ids[beam_context.VERT_BEAM] = 91;
+yellow_laser_ids[beam_context.HOR_BEAM] = 92;
+
+yellow_laser_ids[beam_context.LEFT_DOWN] = 93;
+yellow_laser_ids[beam_context.LEFT_UP] = 94;
+yellow_laser_ids[beam_context.RIGHT_DOWN] = 95;
+yellow_laser_ids[beam_context.RIGHT_UP] = 96;
+
+yellow_laser_ids[beam_context.DOWN_MIR_VERT_BEAM] = 97;
+yellow_laser_ids[beam_context.LEFT_MIR_VERT_BEAM] = 98;
+yellow_laser_ids[beam_context.RIGHT_MIR_VERT_BEAM] = 99;
+yellow_laser_ids[beam_context.UP_MIR_VERT_BEAM] = 100;
+
+yellow_laser_ids[beam_context.DOWN_MIR_HOR_BEAM] = 101;
+yellow_laser_ids[beam_context.LEFT_MIR_HOR_BEAM] = 102;
+yellow_laser_ids[beam_context.RIGHT_MIR_HOR_BEAM] = 103;
+yellow_laser_ids[beam_context.UP_MIR_HOR_BEAM] = 104;
+
+yellow_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_SOUTH] = 105;
+yellow_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_WEST] = 106;
+yellow_laser_ids[beam_context.DOWN_PLYR_VERT_BEAM_NORTH] = 107;
+yellow_laser_ids[beam_context.DOWN_PLYR_HOR_BEAM_EAST] = 108;
+
+yellow_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_SOUTH] = 109;
+yellow_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_WEST] = 110;
+yellow_laser_ids[beam_context.LEFT_PLYR_VERT_BEAM_NORTH] = 111;
+yellow_laser_ids[beam_context.LEFT_PLYR_HOR_BEAM_EAST] = 112;
+
+yellow_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_SOUTH] = 113;
+yellow_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_WEST] = 114;
+yellow_laser_ids[beam_context.RIGHT_PLYR_VERT_BEAM_NORTH] = 115;
+yellow_laser_ids[beam_context.RIGHT_PLYR_HOR_BEAM_EAST] = 116;
+
+yellow_laser_ids[beam_context.UP_PLYR_VERT_BEAM_SOUTH] = 117;
+yellow_laser_ids[beam_context.UP_PLYR_HOR_BEAM_WEST] = 118;
+yellow_laser_ids[beam_context.UP_PLYR_VERT_BEAM_NORTH] = 119;
+yellow_laser_ids[beam_context.UP_PLYR_HOR_BEAM_EAST] = 120;
+
+yellow_laser_ids[beam_context.FILTER_BEAM_NORTH] = 107;
+
+const supported_colours = ["red", "green", "blue", "yellow"];
+const colour_codes = {"red": 1, "green": 2, "blue": 3, "yellow": 4};
+const colour_code_to_ids = {1: red_laser_ids, 2: green_laser_ids, 3: blue_laser_ids, 4: yellow_laser_ids};
 
 var laser_tile_ids = [];
 laser_tile_ids = laser_tile_ids.concat(Object.values(red_laser_ids));
 laser_tile_ids = laser_tile_ids.concat(Object.values(green_laser_ids));
 laser_tile_ids = laser_tile_ids.concat(Object.values(blue_laser_ids));
+laser_tile_ids = laser_tile_ids.concat(Object.values(yellow_laser_ids));
 
 // general constants to be used by this plugin and from within the engine
 const constants = {
@@ -207,7 +249,7 @@ const constants = {
     SwitchId: 17,
     LaserColour: 31,
     PassableRegion: 2,
-    InvisibleTileId: 94
+    InvisibleTileId: 121
 };
 
 
