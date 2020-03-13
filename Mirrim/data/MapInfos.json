@@ -71,6 +71,6 @@ null,
 {"id":69,"expanded":true,"name":"4.3 Maze","order":46,"parentId":50,"scrollX":468,"scrollY":614.5},
 {"id":70,"expanded":false,"name":"5.1 Maze","order":47,"parentId":53,"scrollX":1092,"scrollY":614.6666666666666},
 {"id":71,"expanded":false,"name":"6.1 Maze","order":48,"parentId":53,"scrollX":476,"scrollY":345.5},
-{"id":72,"expanded":false,"name":"7.1 Maze","order":49,"parentId":53,"scrollX":832,"scrollY":640},
+{"id":72,"expanded":false,"name":"7.1 Maze","order":49,"parentId":53,"scrollX":1092,"scrollY":614.6666666666666},
 {"id":73,"expanded":false,"name":"8.1 Maze","order":50,"parentId":53,"scrollX":987,"scrollY":649.5}
 ]
