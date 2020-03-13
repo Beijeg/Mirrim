@@ -532,7 +532,8 @@ class Node{
         this.parent = parent;
         this.child = null;
         this.direction = direction;
-        this.colour = colour
+        this.colour = colour;
+        this.temp_rcv = null;
         $gameMap._events[this.event_id].setDirection(direction);
     }
 
@@ -657,6 +658,10 @@ class Node{
     removeChild(){
         if(this.child !== null){
             Galv.SPAWN.unspawn($gameMap._events[this.child.event_id]);
+            if (this.child.temp_rcv != null) {
+              $gameSwitches.setValue(this.child.temp_rcv, false);
+              this.child.temp_rcv = null;
+            }
             this.child.removeChild();
             this.child = null;
         }
@@ -698,6 +703,9 @@ class Node{
                 receiver = this.getRoot().getReceiver(event);
                 if (receiver !== null){
                     $gameSwitches.setValue(receiver.switch_id, true);
+                    if ($dataMap.events[event].note == 'Temporary') {
+                      this.temp_rcv = receiver.switch_id;
+                    }
                 }
                 return;
             }
