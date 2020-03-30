@@ -722,6 +722,9 @@ class Node{
                 });
                 return;
             }
+            else if (laser_generators.getLaser(event) !== null){
+                return;
+            }
         }
 
         if($gameMap.isPassable(x, y, this.direction) || $gameMap.regionId(x, y) === constants.PassableRegion){
