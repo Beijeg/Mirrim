@@ -1,0 +1,90 @@
+<block:-1,-5,10,10,offbot,center,7>
+CREDITS(press space to skip)
+
+\c[2]Engine
+RPG Maker MV
+
+\c[2]Lead Designer
+Chris Dodic
+
+\c[2]Artwork
+Victoria Lee
+
+\c[2]Story and Dialogue
+Mohammed Azad
+
+\c[2]Music and Audio effects
+Yahya Kisana
+
+\c[2]Produced by
+Yahya Kisana
+
+\c[2]Executive Producer
+Aleia Lois Cabote
+</block>
+
+
+<block:360,0,10,10,50,right,mm21>
+\c[2]Programmers
+Chris Dodic
+William Wong
+Mason Tien
+
+\c[2]Puzzle design
+Chris Dodic
+Victoria Lee
+Mohammed Azad
+Yahya Kisana
+Mason Tien
+William Wong
+</block>
+
+<block:360,0,10,10,30,left,final1>
+\c[2]In-game sprites and assets
+Chris Dodic
+Victoria Lee
+Mohammed Azad
+William Wong
+
+\c[2]Gameplay Testers
+Chris Dodic
+Victoria Lee
+Mohammed Azad
+Yahya Kisana
+Mason Tien
+William Wong
+CMPUT250 WI20 class
+</block>
+
+<block:360,0,10,10,15,left,mm31>
+\c[2]External resource credits
+RPG Maker forums "the-complete-gentlemens-barber-shop.53509/"
+RPG Maker forums "is-it-even-worth-it.110727/"
+GALV_RollCredits
+GALV_Event Spawner
+YEP_MainMenuManager
+YEP_SaveEventLocations
+Tsukimi_FilterController
+
+\c[2]Quality Assurance
+Chris Dodic
+Victoria Lee
+Mohammed Azad
+Yahya Kisana
+Mason Tien
+William Wong
+</block>
+
+<block:999,0,10,10,150,center,final8>
+\c[2]Special Thanks to
+Nathan Sturtevant
+Kristen Yu
+Jeff Cho
+
+And YOU!
+
+\c[3]Disclaimer: All characters that appear
+\c[3]in the game are fictitous, any resemblance
+\c[3]to any person living or dead is coincidental
+\c[3]and unintended
+</block>
