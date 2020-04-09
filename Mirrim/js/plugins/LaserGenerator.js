@@ -641,7 +641,6 @@ class Node{
     getMyNextLocation(){
         var [x, y] = this.getLocation();
         var [ret_x, ret_y] = getNextLocation(x, y, this.direction);
-
         return [ret_x, ret_y];
     }
 
@@ -670,7 +669,7 @@ class Node{
         [x, y] = this.getMyNextLocation();
 
         //confine the laser to the map
-        if (x < 0 || x > $gameMap.width || y < 0 || y > $gameMap.height){
+        if (x < 0 || x >= $gameMap.width() || y < 0 || y >= $gameMap.height()){
             return;
         }
 
