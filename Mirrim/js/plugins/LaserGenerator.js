@@ -517,7 +517,6 @@ function getNextLocation(x, y, direction) {
         ret_x = x + 1;
         ret_y = y;
     }
-
     return [ret_x, ret_y];
 }
 
@@ -574,7 +573,6 @@ class Node{
 
     getNewFilterBeam(x, y, direction){
         if (direction === directions.NORTH || direction === directions.SOUTH){
-            console.log("get new filter beam x: "+x+" y: "+y);
             this.getNewFilterBlockedBeam(x, y, directions.NORTH);
             if(this.child.direction !== direction){
                 this.child.direction = direction;
@@ -670,6 +668,11 @@ class Node{
     drawBeam(){
         var x, y;
         [x, y] = this.getMyNextLocation();
+
+        //confine the laser to the map
+        if (x < 0 || x > $gameMap.width || y < 0 || y > $gameMap.height){
+            return;
+        }
 
         var player_x = $gameVariables.value(constants.PlayerX);
         var player_y = $gameVariables.value(constants.PlayerY);
