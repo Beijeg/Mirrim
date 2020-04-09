@@ -25,7 +25,6 @@ function calculateNumFragments(){
         numTotal += 1;
       };
       if (item.note == "Other") {
-        numArea3 += 1;
         numTotal += 1;
       };
     };
