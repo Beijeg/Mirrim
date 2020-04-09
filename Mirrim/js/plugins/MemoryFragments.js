@@ -24,6 +24,10 @@ function calculateNumFragments(){
         numArea3 += 1;
         numTotal += 1;
       };
+      if (item.note == "Other") {
+        numArea3 += 1;
+        numTotal += 1;
+      };
     };
   });
 };
